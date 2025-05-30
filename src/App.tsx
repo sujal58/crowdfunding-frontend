@@ -1,9 +1,10 @@
 import "./App.css";
+import Header from "./components/common/Header/Header";
 
 function App() {
   return (
     <>
-      <h1>Crowdfunding Frontend Project Setup</h1>
+      <Header />
     </>
   );
 }
