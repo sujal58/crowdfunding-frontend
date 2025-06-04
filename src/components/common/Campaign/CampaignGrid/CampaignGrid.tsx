@@ -1,4 +1,4 @@
-import CampaignCard from "../../ui/CampaignCard/CampaignCard";
+import CampaignCard from "../../../ui/CampaignCard/CampaignCard";
 import "./CampaignGrid.css";
 
 function CampaignGrid() {

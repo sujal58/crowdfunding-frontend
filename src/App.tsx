@@ -1,9 +1,11 @@
 import "./App.css";
-import Homepage from "./components/Pages/Homepage";
+import CreateCampaignPage from "./components/Pages/Campaign/CreateCampaignPage";
+// import Homepage from "./components/Pages/Homepage";
 function App() {
   return (
     <>
-      <Homepage />
+      <CreateCampaignPage />
+      {/* <Homepage /> */}
     </>
   );
 }
