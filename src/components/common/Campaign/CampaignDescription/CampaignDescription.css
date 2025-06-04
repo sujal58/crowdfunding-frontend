@@ -1,0 +1,10 @@
+.campaign-details p {
+  margin-bottom: 1rem;
+}
+.campaign-details h3 {
+  margin-top: 1.5rem;
+}
+.campaign-details ul {
+  margin-left: 1.5rem;
+  list-style-type: disc;
+}
