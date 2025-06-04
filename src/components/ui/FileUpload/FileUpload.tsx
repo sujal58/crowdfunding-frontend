@@ -8,12 +8,30 @@ type fileData = {
   name: string;
 };
 
-function FileUpload({ setValue, error, name, isMultiple }: any) {
+function FileUpload({ setValue, error, name, isMultiple, getValues }: any) {
+  //for ui rendering
   const [filename, setFilename] = useState<fileData[]>([]);
 
+  //method to delete image
   const handleImageCancel = (index: Number) => {
+    //name of file to be removed
+    const fileNameToRemove = filename.find((file) => file.id === index)?.name;
+
+    //filtering file to remove from ui
     const updatedFile = filename.filter((value) => value.id != index);
     setFilename(updatedFile);
+
+    //files extracted from hook form
+    const currentFile = getValues(name) || [];
+
+    if (fileNameToRemove) {
+      const updatedFile = currentFile.filter(
+        (file: File) => file.name !== fileNameToRemove
+      );
+
+      //setting the updated file in hook
+      setValue(name, updatedFile, { shouldValidate: true });
+    }
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({

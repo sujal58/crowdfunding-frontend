@@ -19,6 +19,7 @@ function CampaignForm() {
     handleSubmit,
     reset,
     setValue,
+    getValues,
     formState: { errors },
   } = useForm<CampaignFormData>();
 
@@ -192,6 +193,7 @@ function CampaignForm() {
             onDrop={handleImageDrop}
             error={errors.campaignImage?.message}
             setValue={setValue}
+            getValues={getValues}
             register={register}
             isMultiple={false}
           />
@@ -212,6 +214,7 @@ function CampaignForm() {
             setValue={setValue}
             register={register}
             isMultiple={true}
+            getValues={getValues}
           />
           {errors.supportingImage && (
             <div className="error">{errors.supportingImage.message}</div>
