@@ -63,7 +63,7 @@
   transition: width 0.6s ease;
 }
 
-.donate-btn{
+.donate-btn {
   background-color: #2563eb;
   padding: 0.6rem;
   color: white;
@@ -73,7 +73,7 @@
   user-select: none;
 }
 
-.donate-btn:hover{
+.donate-btn:hover {
   background-color: var(--secondary-btn-hover);
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.5);
 }

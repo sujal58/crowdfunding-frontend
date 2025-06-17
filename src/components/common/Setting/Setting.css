@@ -1,0 +1,210 @@
+.settings-container {
+  padding: 3rem;
+}
+
+.settings-content {
+  display: block;
+}
+
+.settings-section {
+  margin-bottom: 3rem;
+}
+
+.settings-section h3 {
+  font-size: 1.8rem;
+  font-weight: 500;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.profile-form,
+.password-form,
+.kyc-form,
+.twofa-section,
+.delete-account-section {
+  display: grid;
+  gap: 2rem;
+}
+
+.kyc-form {
+  grid-template-columns: 1fr 1fr;
+}
+
+.kyc-details {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.kyc-details p {
+  padding: 0.75rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.form-group input {
+  padding: 0.75rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+}
+
+.form-group input[readonly] {
+  background: #f3f4f6;
+  cursor: not-allowed;
+}
+
+.submit-btn,
+.edit-btn {
+  background: #2563eb;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  width: fit-content;
+}
+
+.submit-btn:hover,
+.submit-btn:focus,
+.edit-btn:hover,
+.edit-btn:focus {
+  background: #1e40af;
+  outline: 3px solid #2563eb;
+  outline-offset: 2px;
+}
+
+.submit-btn:disabled {
+  background: #6b7280;
+  cursor: not-allowed;
+}
+
+.delete-btn {
+  background: #ef4444;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  width: fit-content;
+}
+
+.delete-btn:hover,
+.delete-btn:focus {
+  background: #b91c1c;
+  outline: 3px solid #ef4444;
+  outline-offset: 2px;
+}
+
+.delete-account-section{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.twofa-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.twofa-toggle input[type="checkbox"] {
+  width: 2rem;
+  height: 1rem;
+  cursor: pointer;
+}
+
+.twofa-qr {
+  width: 150px;
+  height: 150px;
+  background: #e5e7eb;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.kyc-upload-section {
+  margin-bottom: 1.5rem;
+}
+
+.upload-label {
+  display: inline-block;
+  background: #2563eb;
+  color: white;
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+  border-radius: 0.75rem;
+  cursor: pointer;
+}
+
+.upload-label:hover,
+.upload-label:focus {
+  background: #1e40af;
+}
+
+.hidden-file-input {
+  display: none;
+}
+
+.kyc-upload-section img {
+  max-width: 150px;
+  max-height: 100px;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  margin-top: 0.5rem;
+  display: block;
+}
+
+.kyc-status {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.progress-bar-background {
+  background: #e5e7eb;
+  height: 16px;
+  border-radius: 9999px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.progress-bar-fill {
+  height: 16px;
+  background-color: #22c55e;
+  width: 35%;
+}
+
+.confidence-score {
+  margin-top: 0.5rem;
+  color: #374151;
+}
+
+.error {
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+@media (max-width: 900px) {
+  .kyc-form {
+    grid-template-columns: 1fr;
+  }
+}

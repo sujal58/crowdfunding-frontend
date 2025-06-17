@@ -1,0 +1,25 @@
+.notification {
+  background: #f3f4f6;
+  border-radius: 0.75rem;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.notification.unread {
+  background: #2563eb;
+  color: white;
+}
+
+.notification button {
+  background: transparent;
+  color: inherit;
+  font-weight: 700;
+}
+
+.notification button:hover,
+.notification button:focus {
+  text-decoration: underline;
+}

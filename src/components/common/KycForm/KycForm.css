@@ -1,0 +1,72 @@
+.kyc-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.form-group input {
+  padding: 0.75rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+}
+
+.kyc-upload-section {
+  margin-bottom: 1.5rem;
+}
+
+.upload-label {
+  display: inline-block;
+  background: #2563eb;
+  color: white;
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+  border-radius: 0.75rem;
+  cursor: pointer;
+}
+
+.upload-label:hover,
+.upload-label:focus {
+  background: #1e40af;
+}
+
+.hidden-file-input {
+  display: none;
+}
+
+.kyc-upload-section img {
+  max-width: 150px;
+  max-height: 100px;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  margin-top: 0.5rem;
+  display: block;
+}
+
+.kyc-status {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.error {
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+@media (max-width: 900px) {
+  .kyc-form {
+    grid-template-columns: 1fr;
+  }
+}

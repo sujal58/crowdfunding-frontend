@@ -16,7 +16,7 @@ function WhyRiseEasy() {
       </p>
       <div className="stats-grid">
         {stats.map((value) => (
-          <div className="stat-card">
+          <div key={value.label} className="stat-card">
             <div className="stat-number">{value.number}</div>
             <div className="stat-label">{value.label}</div>
           </div>

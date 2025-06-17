@@ -1,12 +1,20 @@
 import "./Header.css";
+import { useNavigate } from "react-router-dom";
 
 function Header() {
+  const navigate = useNavigate();
   return (
     <header className="header" aria-label="Main navigation">
-      <div className="header-logo">RiseEasy</div>
+      <div className="header-logo" onClick={() => navigate("/")}>
+        RiseEasy
+      </div>
       <div className="auth-btn">
-        <button className="btn-login">Login</button>
-        <button className="btn-register">Register</button>
+        <button className="btn-login" onClick={() => navigate("/login")}>
+          Login
+        </button>
+        <button className="btn-register" onClick={() => navigate("/register")}>
+          Register
+        </button>
       </div>
     </header>
   );
