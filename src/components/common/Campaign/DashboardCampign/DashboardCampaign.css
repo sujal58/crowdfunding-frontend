@@ -1,0 +1,22 @@
+.dashboard-campaignGrid {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.dashboard-campaignGrid .campaign-grid {
+  margin: 0 auto 4rem;
+  padding: 0 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.campaign-grid-heading {
+  text-align: center;
+  margin: 0 auto 2rem;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--primary-btn-bg);
+  text-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+}

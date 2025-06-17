@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import AuthCard from "../../ui/AuthCard/AuthCard.js";
 import "./auth-style.css";
+import { Link } from "react-router-dom";
 
 function Signup({ setCurrentPage }: any) {
   const {
@@ -58,7 +59,7 @@ function Signup({ setCurrentPage }: any) {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen">
+    <div className="authPage flex items-center justify-center h-screen">
       <AuthCard id="signupPage">
         <h1>Sign Up</h1>
         <form id="signupForm" onSubmit={handleSubmit(onSubmit)}>
@@ -149,9 +150,9 @@ function Signup({ setCurrentPage }: any) {
         </form>
         <div className="auth-links">
           Already have an account?{" "}
-          <a href="#login" onClick={() => setCurrentPage("login")}>
+          <Link to="/login" onClick={() => setCurrentPage("login")}>
             Log in
-          </a>
+          </Link>
         </div>
       </AuthCard>
     </div>

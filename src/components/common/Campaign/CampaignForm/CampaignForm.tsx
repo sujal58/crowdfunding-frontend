@@ -74,7 +74,7 @@ function CampaignForm() {
   };
 
   return (
-    <div className="campaign-card">
+    <div className="campaign-form-card">
       <h2>Create Campaign</h2>
       <form id="campaignForm" onSubmit={handleSubmit(onSubmit)}>
         <div className="form-group">

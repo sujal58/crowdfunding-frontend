@@ -1,5 +1,6 @@
 .donation-feed {
-  max-height: 150px;
+  text-align: center;
+  max-height: 200px;
   overflow-y: auto;
   background: #f3f4f6;
   padding: 1rem;

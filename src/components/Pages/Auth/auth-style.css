@@ -7,9 +7,9 @@ body,
   font-family: "Inter", sans-serif;
 }
 
-input,
-select,
-button {
+.authPage input,
+.authPage select,
+.authPage button {
   font-family: inherit;
   font-size: 1rem;
   width: 100%;
@@ -18,9 +18,9 @@ button {
   border-radius: 0.5rem;
 }
 
-input:focus,
-select:focus,
-button:focus {
+.authPage input:focus,
+.authPage select:focus,
+.authPage button:focus {
   outline: 2px solid #2563eb;
   outline-offset: 2px;
   border-color: #2563eb;
@@ -43,7 +43,7 @@ label {
   margin-top: 0.25rem;
 }
 
-h1 {
+.authPage h1 {
   font-size: 2rem;
   font-weight: 800;
   margin-bottom: 1.5rem;
@@ -52,7 +52,7 @@ h1 {
 }
 
 /* === Button Styling === */
-button {
+.authPage button {
   border: none;
   border-radius: 0.5rem;
   cursor: pointer;

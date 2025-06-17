@@ -1,13 +1,9 @@
 import "./App.css";
-import CreateCampaignPage from "./components/Pages/Campaign/CreateCampaignPage";
-// import Homepage from "./components/Pages/Homepage";
+import { RouterProvider } from "react-router-dom";
+import { router } from "./Routes/Route.ts";
+
 function App() {
-  return (
-    <>
-      <CreateCampaignPage />
-      {/* <Homepage /> */}
-    </>
-  );
+  return <>{<RouterProvider router={router} />}</>;
 }
 
 export default App;
