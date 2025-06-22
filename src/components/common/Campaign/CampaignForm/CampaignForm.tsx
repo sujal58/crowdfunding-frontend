@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import FileUpload from "../../../ui/FileUpload/FileUpload";
 import "./CampaignForm.css";
+import { Link } from "react-router-dom";
 
 type CampaignFormData = {
   campaignTitle: string;
@@ -67,11 +68,11 @@ function CampaignForm() {
     }
   };
 
-  const handleDashboard = (e: any) => {
-    e.preventDefault();
-    console.log("Navigating to dashboard");
-    window.location.hash = "dashboard";
-  };
+  // const handleDashboard = (e: any) => {
+  //   e.preventDefault();
+  //   console.log("Navigating to dashboard");
+  //   window.location.hash = "dashboard";
+  // };
 
   return (
     <div className="campaign-form-card">
@@ -229,9 +230,9 @@ function CampaignForm() {
         </button>
       </form>
       <div className="campaign-links">
-        <a href="#dashboard" id="toDashboard" onClick={handleDashboard}>
+        <Link to="/user-dashboard" id="toDashboard">
           Back to Dashboard
-        </a>
+        </Link>
       </div>
     </div>
   );

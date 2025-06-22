@@ -1,4 +1,4 @@
-aside {
+.sidebar {
   width: 260px;
   background: #f3f4f6;
   padding: 2rem 1.5rem;
@@ -29,11 +29,11 @@ nav[aria-label="Dashboard Navigation"] button:focus {
   outline: none;
 }
 
-#settings-submenu{
+#settings-submenu {
   margin-top: 1rem;
 }
 
-#settings-submenu button{
+#settings-submenu button {
   width: 100%;
   background: transparent;
   color: #374151;
@@ -43,19 +43,16 @@ nav[aria-label="Dashboard Navigation"] button:focus {
   text-align: center;
 }
 
-#settings-submenu .active{
-  
+#settings-submenu .active {
   color: #2563eb;
-
-
 }
 
-.open{
+.open {
   display: block;
 }
 
-.close{
-  display:none;
+.close {
+  display: none;
 }
 
 @media (max-width: 900px) {
