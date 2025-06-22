@@ -1,23 +1,28 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./Header.css";
 
-function AuthHeader() {
+function AuthHeader({ username }: { username: string }) {
   let navigate = useNavigate();
+  let location = useLocation();
   const handleLogout = () => {
     console.log("Logging out");
     window.location.hash = "login";
   };
 
+  const navigateLink = location.pathname.includes("/user-dashboard")
+    ? "/user-dashboard"
+    : "/admin-dashboard";
+
   return (
     <header className="header">
-      <h1 className="header-logo" onClick={() => navigate("/dashboard")}>
+      <h1 className="header-logo" onClick={() => navigate(navigateLink)}>
         RiseEasy
       </h1>
-      <label>Welcome, Admin</label>
+      <label>Welcome, {username}</label>
       <nav className="auth-btn">
         <button
           className="btn-login"
-          onClick={() => navigate("/create-campaign")}
+          onClick={() => navigate(`${navigateLink}/create-campaign`)}
         >
           Create Campaign
         </button>

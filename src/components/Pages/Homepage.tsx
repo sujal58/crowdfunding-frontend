@@ -2,7 +2,7 @@ import Header from "../common/Header/Header";
 import Hero from "../common/Hero/Hero";
 import SearchFilter from "../common/SearchFilter/SearchFilter";
 import WhyRiseEasy from "../common/WhyRiseEasy/WhyRiseEasy";
-import StartCampaign from "../common/StartCampign/StartCampign";
+import StartCampaign from "../common/StartCampign-Info/StartCampign";
 import Footer from "../common/Footer/Footer";
 import CampaignGrid from "../common/Campaign/CampaignGrid/CampaignGrid";
 

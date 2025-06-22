@@ -4,6 +4,7 @@ import "./UserSideBar.css";
 interface Tab {
   id: string;
   label: string;
+  url: string;
   panel: ReactNode;
 }
 
@@ -13,6 +14,7 @@ interface SidebarProps {
   setActiveTab: (tabId: string) => void;
   activeSettingsTab: string;
   setActiveSettingsTab: (settingsTab: string) => void;
+  setNavigationUrl: (url: string) => void;
 }
 
 function UserSideBar({
@@ -21,6 +23,7 @@ function UserSideBar({
   setActiveTab,
   activeSettingsTab,
   setActiveSettingsTab,
+  setNavigationUrl,
 }: SidebarProps) {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
@@ -31,11 +34,16 @@ function UserSideBar({
   const handleSettingsTabClick = (settingsTab: string) => {
     setActiveTab("tabSettings");
     setActiveSettingsTab(settingsTab);
+    setNavigationUrl(
+      settingsTab === "profile" ? "setting" : `setting/${settingsTab}`
+    );
   };
 
-  const handleSidebarClick = (id: string) => {
-    setActiveTab(id);
+  const handleSidebarClick = (tab: Tab) => {
+    console.log(tab);
+    setActiveTab(tab.id);
     setIsSettingsOpen(false);
+    setNavigationUrl(tab.url);
   };
 
   const settingsSubmenu = [
@@ -57,7 +65,7 @@ function UserSideBar({
                     onClick={() => {
                       toggleSettings();
                       setActiveTab(tab.id);
-                      setActiveSettingsTab("profile");
+                      setActiveSettingsTab("/setting");
                     }}
                     aria-selected={activeTab === tab.id}
                     aria-expanded={isSettingsOpen}
@@ -93,7 +101,7 @@ function UserSideBar({
               ) : (
                 <button
                   className={activeTab === tab.id ? "active" : ""}
-                  onClick={() => handleSidebarClick(tab.id)}
+                  onClick={() => handleSidebarClick(tab)}
                   aria-selected={activeTab === tab.id}
                 >
                   {tab.label}

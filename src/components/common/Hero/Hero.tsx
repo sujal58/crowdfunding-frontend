@@ -1,6 +1,8 @@
+import { Navigate, useNavigate } from "react-router-dom";
 import "./Hero.css";
 
 const HeroSection: React.FC = () => {
+  const navigate = useNavigate();
   return (
     <section
       className="hero"
@@ -21,7 +23,11 @@ const HeroSection: React.FC = () => {
           role="group"
           aria-label="Primary call to action buttons"
         >
-          <button className="btn-primary" aria-label="Start a new campaign">
+          <button
+            className="btn-primary"
+            aria-label="Start a new campaign"
+            onClick={() => navigate("/login")}
+          >
             Start Campaign
           </button>
           <button className="btn-secondary" aria-label="Explore causes">
