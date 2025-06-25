@@ -3,7 +3,6 @@ import Homepage from "../components/Pages/Homepage";
 import Login from "../components/Pages/Auth/Login";
 import Register from "../components/Pages/Auth/Register"
 import DashboardPage from "../components/Pages/DashboardPage/DashboardPage";
-import CreateCampaignPage from "../components/Pages/Campaign/CreateCampaignPage";
 import AdminDashboardPage from "../components/Pages/AdminDashboardPage";
 import CampaignTable from "../components/common/Campaign/CampignTable/CampaignTable";
 import DonationFeed from "../components/ui/Donation/DonationFeed";
@@ -13,6 +12,8 @@ import Notifications from "../components/ui/Notification/Notification";
 import Profile from "../components/common/User-dashboard/Setting/Profile";
 import Security from "../components/common/User-dashboard/Setting/Security";
 import KYCForm from "../components/common/KycForm/KycForm";
+import AdminLogin from "@/components/Pages/Auth/AdminLogin";
+import AuthLayout from "@/Layout/AuthLayout";
 
 export const router = createBrowserRouter([
     {
@@ -25,54 +26,66 @@ export const router = createBrowserRouter([
       Component: Login,
     },
     {
+      path: "/admin-login",
+      Component: AdminLogin,
+    },
+    {
       path: "/register",
       Component: Register,
     },
     {
-      path: "/user-dashboard",
-      Component: DashboardPage,
-      children: [
+      Component: AuthLayout,
+      children:[
         {
-          
-          // path: "my-campaigns",
-          index: true,
-          Component: CampaignTable,
-        },
-        {
-          path: "donations",
-          Component: DonationFeed,
-        },
-        {
-          path: "campaigns",
-          Component: DashboardCampign,
-        },
-        {
-          path: "setting",
-          Component: Settings,
+          path: "/user-dashboard",
+          Component: DashboardPage,
           children: [
             {
-              // path: "profile",
+              
+              // path: "my-campaigns",
               index: true,
-              Component: Profile
+              Component: CampaignTable,
             },
             {
-              path: "security",
-              Component: Security
+              path: "donations",
+              Component: DonationFeed,
             },
             {
-              path: "kyc",
-              Component: KYCForm
-            }
+              path: "campaigns",
+              Component: DashboardCampign,
+            },
+            {
+              path: "setting",
+              Component: Settings,
+              children: [
+                {
+                  // path: "profile",
+                  index: true,
+                  Component: Profile
+                },
+                {
+                  path: "security",
+                  Component: Security
+                },
+                {
+                  path: "kyc",
+                  Component: KYCForm
+                }
+              ]
+            },
+            {
+              path: "notification",
+              Component: Notifications,
+            },
           ]
         },
         {
-          path: "notification",
-          Component: Notifications,
+          path: "/admin-dashboard",
+          Component: AdminDashboardPage,
         },
       ]
+
     },
-   {
-      path: "/admin-dashboard",
-      Component: AdminDashboardPage,
-    },
+   
+   
   ]);

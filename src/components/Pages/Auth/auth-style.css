@@ -7,6 +7,10 @@ body,
   font-family: "Inter", sans-serif;
 }
 
+.authPage {
+  height: auto;
+}
+
 .authPage input,
 .authPage select,
 .authPage button {
@@ -46,6 +50,7 @@ label {
 .authPage h1 {
   font-size: 2rem;
   font-weight: 800;
+  margin-top: 2rem;
   margin-bottom: 1.5rem;
   text-align: center;
   color: #2563eb;

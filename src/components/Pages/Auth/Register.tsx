@@ -3,8 +3,13 @@ import { toast } from "react-toastify";
 import AuthCard from "../../ui/AuthCard/AuthCard.js";
 import "./auth-style.css";
 import { Link } from "react-router-dom";
+import { signup } from "@/apis/auth.api.js";
+import type { ISignupRequest } from "@/interfaces/auth.interface.js";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Signup({ setCurrentPage }: any) {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -14,31 +19,47 @@ function Signup({ setCurrentPage }: any) {
     reset,
   } = useForm({
     defaultValues: {
+      name: "",
+      username: "",
       email: "",
       password: "",
       confirmPassword: "",
-      role: "",
-      profilePicture: null,
+      roles: "",
     },
   });
 
   const onSubmit = async (data: any) => {
+    const { confirmPassword, ...remain } = data;
     try {
-      console.log(
-        `Signing up: ${data.email}, Role: ${data.role}, Profile Picture:`,
-        data.profilePicture
-      );
-      toast.success("Account created! Please log in.", {
-        style: { background: "#f0fdf4", color: "#22c55e" },
-        onClose: () => {
-          reset();
-          setCurrentPage("login");
-        },
-      });
-    } catch (error) {
-      toast.error("Email already exists.", {
-        style: { background: "#fef2f2", color: "#ef4444" },
-      });
+      const payload: ISignupRequest = {
+        ...remain,
+        roles: [remain.roles],
+      };
+
+      const response = await signup(payload);
+      console.log(response);
+      if (response.status == 200) {
+        toast.success("Registered Successfully!", {
+          style: { background: "#f0fdf4", color: "#22c55e" },
+          autoClose: 2000,
+          onClose: () => {
+            reset();
+            setCurrentPage("login");
+          },
+        });
+        navigate("/login");
+      }
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        toast.error(error.response.data.data || "Registration Failed!", {
+          style: { background: "#fef2f2", color: "#ef4444" },
+        });
+        console.log(error.response.data);
+      } else {
+        toast.error("Registration Failed!", {
+          style: { background: "#fef2f2", color: "#ef4444" },
+        });
+      }
     }
   };
 
@@ -63,6 +84,34 @@ function Signup({ setCurrentPage }: any) {
       <AuthCard id="signupPage">
         <h1>Sign Up</h1>
         <form id="signupForm" onSubmit={handleSubmit(onSubmit)}>
+          <div className="form-group">
+            <label htmlFor="signupName">Name</label>
+            <input
+              type="text"
+              id="signupName"
+              placeholder="Enter your full name"
+              aria-label="Name"
+              {...register("name", {
+                required: "Name is required",
+              })}
+            />
+            {errors.name && <div className="error">{errors.name.message}</div>}
+          </div>
+          <div className="form-group">
+            <label htmlFor="signupName">Username</label>
+            <input
+              type="text"
+              id="signupUsername"
+              placeholder="Enter your Username"
+              aria-label="Username"
+              {...register("username", {
+                required: "Username is required",
+              })}
+            />
+            {errors.username && (
+              <div className="error">{errors.username.message}</div>
+            )}
+          </div>
           <div className="form-group">
             <label htmlFor="signupEmail">Email</label>
             <input
@@ -124,7 +173,7 @@ function Signup({ setCurrentPage }: any) {
             <select
               id="signupRole"
               aria-label="Role"
-              {...register("role", { required: "Please select a role." })}
+              {...register("roles", { required: "Please select a role." })}
             >
               <option value="" disabled>
                 Select your role
@@ -132,7 +181,9 @@ function Signup({ setCurrentPage }: any) {
               <option value="Donor">Donor</option>
               <option value="Creator">Creator</option>
             </select>
-            {errors.role && <div className="error">{errors.role.message}</div>}
+            {errors.roles && (
+              <div className="error">{errors.roles.message}</div>
+            )}
           </div>
           <button type="submit" className="submit-btn" aria-label="Sign up">
             Sign Up
