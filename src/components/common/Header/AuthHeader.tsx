@@ -1,13 +1,11 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import "./Header.css";
+import useAuth from "@/Context/AuthContext";
 
-function AuthHeader({ username }: { username: string }) {
+function AuthHeader() {
   let navigate = useNavigate();
   let location = useLocation();
-  const handleLogout = () => {
-    console.log("Logging out");
-    window.location.hash = "login";
-  };
+  const { logout, username } = useAuth();
 
   const navigateLink = location.pathname.includes("/user-dashboard")
     ? "/user-dashboard"
@@ -26,7 +24,7 @@ function AuthHeader({ username }: { username: string }) {
         >
           Create Campaign
         </button>
-        <button className="btn-register" onClick={handleLogout}>
+        <button className="btn-register" onClick={() => logout()}>
           Log Out
         </button>
       </nav>

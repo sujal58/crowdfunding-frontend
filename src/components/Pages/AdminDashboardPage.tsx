@@ -73,7 +73,7 @@ function AdminDashboardPage() {
   ];
   return (
     <div className="min-h-screen bg-gray-100">
-      <AuthHeader username="Admin" />
+      <AuthHeader />
       <div className="dashboard-container" style={{ display: "flex" }}>
         <AdminSidebar
           tabs={tabs}

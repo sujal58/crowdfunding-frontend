@@ -1,6 +1,6 @@
 import Sidebar from "../../common/sidebar/UserSideBar.tsx";
 import Settings from "../../common/User-dashboard/Setting/Setting.tsx";
-import { useEffect, useState, type ReactElement, type ReactNode } from "react";
+import { useEffect, useState } from "react";
 import AuthHeader from "../../common/Header/AuthHeader.js";
 import CampaignTable from "../../common/Campaign/CampignTable/CampaignTable.tsx";
 import Notifications from "../../ui/Notification/Notification.tsx";
@@ -15,8 +15,6 @@ function DashboardPage() {
   const [navigationUrl, setNavigationUrl] = useState("/user-dashboard");
 
   const navigate = useNavigate();
-
-  const isNestedRoute = location.pathname !== "/user-dashboard";
 
   useEffect(() => {
     navigate(navigationUrl);
@@ -58,7 +56,7 @@ function DashboardPage() {
 
   return (
     <>
-      <AuthHeader username="User" />
+      <AuthHeader />
       <div className="dashboard-container" style={{ display: "flex" }}>
         <Sidebar
           tabs={tabs}

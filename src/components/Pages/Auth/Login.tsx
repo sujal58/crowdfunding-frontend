@@ -3,8 +3,24 @@ import { toast } from "react-toastify";
 import AuthCard from "../../ui/AuthCard/AuthCard";
 import "./auth-style.css";
 import { Link, useNavigate } from "react-router-dom";
+import { VscEyeClosed } from "react-icons/vsc";
+import { PiEyeClosedBold } from "react-icons/pi";
+
+import type {
+  ILoginRequest,
+  ILoginResponse,
+} from "@/interfaces/auth.interface";
+import { signIn } from "@/apis/auth.api";
+import type { AxiosResponse } from "axios";
+import axios from "axios";
+import { useState } from "react";
+import useAuth from "@/Context/AuthContext";
 
 function Login({ setCurrentPage }: any) {
+  const [showPassword, setShowPassword] = useState(false);
+
+  const { login } = useAuth();
+
   let navigate = useNavigate();
   const {
     register,
@@ -16,19 +32,40 @@ function Login({ setCurrentPage }: any) {
   });
 
   const onSubmit = async (data: any) => {
+    const { email, password } = data;
+
     try {
-      console.log(`Logging in: ${data.email}`);
-      toast.success("Logged in successfully!", {
-        style: { background: "#f0fdf4", color: "#22c55e" },
-        onClose: () => {
-          reset();
-          alert("Redirecting to user dashboard...");
-        },
-      });
-    } catch (error) {
-      toast.error("Invalid email or password.", {
-        style: { background: "#fef2f2", color: "#ef4444" },
-      });
+      const payload: ILoginRequest = { email_username: email, password };
+
+      const response: AxiosResponse<ILoginResponse> = await signIn(payload);
+
+      if (response.status == 200) {
+        if (response.data.data.roles.includes("ROLE_ADMIN")) {
+          toast.warn("Only user login allowed!");
+          return;
+        }
+
+        toast.success("Logged in successfully!", {
+          style: { background: "#f0fdf4", color: "#22c55e" },
+          onClose: () => {
+            reset();
+          },
+        });
+        login(response.data.data);
+        navigate("/user-dashboard");
+      }
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        const message =
+          error.response.data?.data || "Invalid email or password.";
+        toast.error(message, {
+          style: { background: "#fef2f2", color: "#ef4444" },
+        });
+      } else {
+        toast.error("Something went wrong. Please try again.", {
+          style: { background: "#fef2f2", color: "#ef4444" },
+        });
+      }
     }
   };
 
@@ -49,33 +86,33 @@ function Login({ setCurrentPage }: any) {
   };
 
   return (
-    <div className="authPage flex items-center justify-center h-screen">
+    <div className="authPage flex items-center justify-center">
       <AuthCard id="loginPage">
         <h1>Log In</h1>
         <form id="loginForm" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-group">
-            <label htmlFor="loginEmail">Email</label>
+            <label htmlFor="loginEmail">Email or username</label>
             <input
-              type="email"
+              type="text"
               id="loginEmail"
-              placeholder="Enter your email"
+              placeholder="Enter your email or username"
               aria-label="Email"
               {...register("email", {
                 required: "Email is required",
-                pattern: {
-                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                  message: "Please enter a valid email.",
-                },
+                // pattern: {
+                //   value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                //   message: "Please enter a valid email.",
+                // },
               })}
             />
             {errors.email && (
               <div className="error">{errors.email.message}</div>
             )}
           </div>
-          <div className="form-group">
+          <div className="form-group" style={{ position: "relative" }}>
             <label htmlFor="loginPassword">Password</label>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               id="loginPassword"
               placeholder="Enter your password"
               aria-label="Password"
@@ -83,6 +120,19 @@ function Login({ setCurrentPage }: any) {
                 required: "Please enter a password.",
               })}
             />
+            <span
+              onClick={() => setShowPassword(!showPassword)}
+              style={{
+                position: "absolute",
+                right: "10px",
+                top: "70%",
+                transform: "translateY(-50%)",
+                cursor: "pointer",
+              }}
+            >
+              {showPassword ? <VscEyeClosed /> : <PiEyeClosedBold />}
+            </span>
+
             {errors.password && (
               <div className="error">{errors.password.message}</div>
             )}
@@ -105,7 +155,7 @@ function Login({ setCurrentPage }: any) {
             className="admin-toggle-btn"
             id="toAdminLogin"
             aria-label="Login as Administrator"
-            onClick={() => setCurrentPage("adminLogin")}
+            onClick={() => navigate("/admin-login")}
           >
             Login as Administrator
           </button>
