@@ -1,11 +1,12 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import "./Header.css";
 import useAuth from "@/Context/AuthContext";
+import { MdVerifiedUser } from "react-icons/md";
 
 function AuthHeader() {
   let navigate = useNavigate();
   let location = useLocation();
-  const { logout, username } = useAuth();
+  const { logout, username, status } = useAuth();
 
   const navigateLink = location.pathname.includes("/user-dashboard")
     ? "/user-dashboard"
@@ -16,7 +17,9 @@ function AuthHeader() {
       <h1 className="header-logo" onClick={() => navigate(navigateLink)}>
         RiseEasy
       </h1>
-      <label>Welcome, {username}</label>
+      <label>
+        Welcome, {username} {status === "VERIFIED" && <MdVerifiedUser />}
+      </label>
       <nav className="auth-btn">
         <button
           className="btn-login"

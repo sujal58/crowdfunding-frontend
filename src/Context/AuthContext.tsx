@@ -4,6 +4,7 @@ type AuthContextType = {
   token: string;
   username: string;
   roles: string[];
+  status: string;
   login: (userData: userDataType) => void;
   logout: () => void;
 };
@@ -12,12 +13,14 @@ type userDataType = {
   token: string;
   username: string;
   roles: string[];
+  status: string;
 };
 
 export const authContext = createContext<AuthContextType>({
   username: "",
   token: "",
   roles: [],
+  status: "",
   login: () => {},
   logout: () => {},
 });
@@ -33,12 +36,13 @@ export function AuthProvider({ children }: any) {
       username: userData.username,
       token: userData.token,
       roles: userData.roles,
+      status: userData.status,
     });
     localStorage.setItem("userdata", JSON.stringify(userData));
   };
 
   const logout = () => {
-    setAuth({ token: "", username: "", roles: [] });
+    setAuth({ token: "", username: "", roles: [], status: "" });
     localStorage.removeItem("userdata");
   };
 

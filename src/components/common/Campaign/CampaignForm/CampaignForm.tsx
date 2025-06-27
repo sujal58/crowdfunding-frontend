@@ -3,6 +3,9 @@ import { toast } from "react-toastify";
 import FileUpload from "../../../ui/FileUpload/FileUpload";
 import "./CampaignForm.css";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import useAuth from "@/Context/AuthContext";
+import { Tooltip as ReactTooltip } from "react-tooltip";
 
 type CampaignFormData = {
   campaignTitle: string;
@@ -15,6 +18,17 @@ type CampaignFormData = {
 };
 
 function CampaignForm() {
+  const { status } = useAuth();
+  const [isVerified, setIsVerified] = useState(
+    status === "VERIFIED" ? true : false
+  );
+
+  useEffect(() => {
+    setIsVerified(status === "VERIFIED" ? true : false);
+  }, [status]);
+  console.log(status);
+  console.log(isVerified);
+
   const {
     register,
     handleSubmit,
@@ -45,15 +59,6 @@ function CampaignForm() {
         formData.append("image", data.campaignImage);
       }
 
-      // console.log("Creating campaign:", {
-      //   title: data.campaignTitle,
-      //   description: data.campaignDescription,
-      //   fundingGoal: data.fundingGoal,
-      //   duration: data.duration,
-      //   category: data.category,
-      //   image: data.campaignImage?.name,
-      // });
-
       toast.success("Campaign submitted for review!", {
         style: { background: "#f0fdf4", color: "#22c55e" },
         onClose: () => {
@@ -67,12 +72,6 @@ function CampaignForm() {
       });
     }
   };
-
-  // const handleDashboard = (e: any) => {
-  //   e.preventDefault();
-  //   console.log("Navigating to dashboard");
-  //   window.location.hash = "dashboard";
-  // };
 
   return (
     <div className="campaign-form-card">
@@ -225,9 +224,15 @@ function CampaignForm() {
           type="submit"
           className="submit-btn"
           aria-label="Create Campaign"
+          disabled={!isVerified}
+          data-tooltip-content={
+            isVerified ? "" : "Verify your kyc to create your first Campaign!"
+          }
+          data-tooltip-id="myTooltip"
         >
           Create Campaign
         </button>
+        <ReactTooltip id="myTooltip" />
       </form>
       <div className="campaign-links">
         <Link to="/user-dashboard" id="toDashboard">
