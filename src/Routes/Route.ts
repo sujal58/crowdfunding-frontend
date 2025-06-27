@@ -14,6 +14,7 @@ import Security from "../components/common/User-dashboard/Setting/Security";
 import KYCForm from "../components/common/KycForm/KycForm";
 import AdminLogin from "@/components/Pages/Auth/AdminLogin";
 import AuthLayout from "@/Layout/AuthLayout";
+import CampaignForm from "@/components/common/Campaign/CampaignForm/CampaignForm";
 
 export const router = createBrowserRouter([
     {
@@ -76,6 +77,10 @@ export const router = createBrowserRouter([
             {
               path: "notification",
               Component: Notifications,
+            },
+            {
+              path: "create-campaign",
+              Component: CampaignForm,
             },
           ]
         },

@@ -36,8 +36,10 @@ function Login({ setCurrentPage }: any) {
 
     try {
       const payload: ILoginRequest = { email_username: email, password };
+      console.log(payload);
 
       const response: AxiosResponse<ILoginResponse> = await signIn(payload);
+      console.log(response.data.data);
 
       if (response.status == 200) {
         if (response.data.data.roles.includes("ROLE_ADMIN")) {
@@ -56,8 +58,7 @@ function Login({ setCurrentPage }: any) {
       }
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response) {
-        const message =
-          error.response.data?.data || "Invalid email or password.";
+        const message = error.response.data?.data || "Request failed!";
         toast.error(message, {
           style: { background: "#fef2f2", color: "#ef4444" },
         });

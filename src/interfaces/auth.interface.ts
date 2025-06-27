@@ -22,6 +22,7 @@ export interface ILoginRequest {
     data:{
       username: string;
       token:string;
-      roles:string[]
+      roles:string[];
+      status:string
     }
   }
