@@ -10,9 +10,10 @@ const axiosInstance = axios.create({
 // Add request interceptor to inject the token
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token: any = getToken();
+    const token: string | null = getToken();
+    console.log(token);
     if (token) {
-      config.headers.Authorization = `Bearer ${token.jwtToken}`;
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
@@ -28,14 +29,18 @@ axiosInstance.interceptors.response.use(
     if (error.response?.status === 401) {
       // Handle unauthorized access (e.g., redirect to login)
       localStorage.removeItem("token");
-      window.location.href = "/signin";
+      window.location.href = "/login";
     }
     return Promise.reject(error);
   },
 );
 
 export const getToken = (): string | null => {
-  return JSON.parse(localStorage.getItem("userDetails")!);
+  const user = JSON.parse(localStorage.getItem("userdata")!);
+  if(user){
+    return user.token;
+  }
+  return null;
 };
 
 export default axiosInstance;

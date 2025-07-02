@@ -69,24 +69,6 @@ function DashboardPage() {
         <main>
           <Outlet />
         </main>
-
-        {/* {isNestedRoute ? (
-          <Outlet />
-        ) : (
-          <main>
-            {tabs.map((tab) => (
-              <section
-                key={tab.id}
-                role="tabpanel"
-                id={`panel${tab.id.replace("tab", "")}`}
-                aria-labelledby={tab.id}
-                hidden={activeTab !== tab.id}
-              >
-                {tab.panel}
-              </section>
-            ))}
-          </main> 
-        )} */}
       </div>
     </>
   );

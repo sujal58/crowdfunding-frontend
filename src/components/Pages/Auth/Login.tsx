@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import AuthCard from "../../ui/AuthCard/AuthCard";
 import "./auth-style.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, redirect, useNavigate } from "react-router-dom";
 import { VscEyeClosed } from "react-icons/vsc";
 import { PiEyeClosedBold } from "react-icons/pi";
 
@@ -17,11 +17,15 @@ import { useState } from "react";
 import useAuth from "@/Context/AuthContext";
 
 function Login({ setCurrentPage }: any) {
+  let navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
-  const { login } = useAuth();
+  const { token, login } = useAuth();
+  console.log(token);
+  if (token) {
+    navigate("/user-dashboard");
+  }
 
-  let navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -63,6 +67,7 @@ function Login({ setCurrentPage }: any) {
           style: { background: "#fef2f2", color: "#ef4444" },
         });
       } else {
+        console.log(error);
         toast.error("Something went wrong. Please try again.", {
           style: { background: "#fef2f2", color: "#ef4444" },
         });

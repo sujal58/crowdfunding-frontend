@@ -15,7 +15,7 @@ function AuthHeader() {
   return (
     <header className="header">
       <h1 className="header-logo" onClick={() => navigate(navigateLink)}>
-        RiseEasy
+        fundSaathi
       </h1>
       <label>
         Welcome, {username} {status === "VERIFIED" && <MdVerifiedUser />}

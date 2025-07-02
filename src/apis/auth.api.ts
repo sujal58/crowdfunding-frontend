@@ -1,5 +1,5 @@
 import type{ ISignupRequest, ILoginRequest, ISignupResponse, ILoginResponse } from "@/interfaces/auth.interface";
-import { serverApis } from "@/constant/api.constant";
+import { apiEndpoints } from "@/constant/api.constant";
 import axiosInstance from "./axios.instance";
 import type{ AxiosResponse } from "axios";
 
@@ -9,7 +9,7 @@ export const signup = async (
 ): Promise<AxiosResponse<ISignupResponse>> => {
   try {
     const response = await axiosInstance.post(
-      `${serverApis.signupUrl}`,
+      `${apiEndpoints.signupUrl}`,
       payload,
     );
 
@@ -24,7 +24,7 @@ export const signIn = async (
 ): Promise<AxiosResponse<ILoginResponse>> => {
   try {
     const response = await axiosInstance.post(
-      `${serverApis.loginUrl}`,
+      `${apiEndpoints.loginUrl}`,
       payload,
     );
     return response;
