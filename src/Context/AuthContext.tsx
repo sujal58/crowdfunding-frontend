@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from "react";
+import { Navigate, redirect, useNavigate } from "react-router-dom";
 
 type AuthContextType = {
   token: string;
@@ -27,8 +28,13 @@ export const authContext = createContext<AuthContextType>({
 
 export function AuthProvider({ children }: any) {
   const [auth, setAuth] = useState<userDataType>(() => {
-    const saved = localStorage.getItem("userdata");
-    return saved ? JSON.parse(saved) : { token: "", username: "", roles: [] };
+    try {
+      const saved = localStorage.getItem("userdata");
+      return saved ? JSON.parse(saved) : { token: "", username: "", roles: [] };
+    } catch (error) {
+      console.error("Invalid userdata in localStorage:", error);
+      return { token: "", username: "", roles: [] };
+    }
   });
 
   const login = (userData: userDataType) => {
