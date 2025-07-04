@@ -1,23 +1,31 @@
 import React from "react";
-import CampaignTable from "../CampaignTable";
+import FundTable from "../table/FundTable";
+import type { Fund } from "@/types";
 
 const PendingReleases: React.FC = () => {
-  const campaigns = [
+  const fundSamples: Fund[] = [
     {
       id: 1,
-      title: "Clean Water for All",
-      creator: "John Doe",
-      goal: "$1,000",
+      campaign: "Clean Water for All",
+      campaigner: "Alice Johnson",
+      amount: "5000",
+      releaseDate: "2025-06-15",
+      status: "Released",
+    },
+    {
+      id: 2,
+      campaign: "Education for Girls",
+      campaigner: "Mohammed El-Sayed",
+      amount: "3000",
+      scheduledDate: "2025-07-10",
       status: "Pending",
-      scheduledDate: "2025-05-19",
     },
     {
       id: 3,
-      title: "Education for Every Child",
-      creator: "Jane Smith",
-      goal: "$500",
+      campaign: "Disaster Relief Fund",
+      campaigner: "Rachel Green",
+      amount: "7000",
       status: "Held",
-      scheduledDate: "2025-05-19",
     },
   ];
 
@@ -51,9 +59,9 @@ const PendingReleases: React.FC = () => {
   };
 
   return (
-    <CampaignTable
+    <FundTable
       type="pendingReleases"
-      campaigns={campaigns}
+      funds={fundSamples}
       getActions={getActions}
     />
   );

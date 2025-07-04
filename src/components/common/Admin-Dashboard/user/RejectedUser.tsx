@@ -1,30 +1,33 @@
 import React, { useEffect, useState } from "react";
-import { getAllUser, getAllUserByKycStatus } from "@/apis/user.api";
+import type { AxiosResponse } from "axios";
 import type {
   IGetUsersResponse,
   IUserResponse,
 } from "@/interfaces/user.interface";
+import axios from "axios";
 import { toast } from "react-toastify";
-import axios, { type AxiosResponse } from "axios";
 import UserTable from "../table/UserTable";
+import { getAllUserByKycStatus } from "@/apis/user.api";
 import { EKycStatus } from "@/enums";
 
-const UnverifiedUsers: React.FC = () => {
+const RejectedUser: React.FC = () => {
   const [users, setUsers] = useState<IUserResponse[]>([]);
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const response: AxiosResponse<IGetUsersResponse> =
-          await getAllUserByKycStatus(EKycStatus.PENDING);
-        console.log(response);
+          await getAllUserByKycStatus(EKycStatus.REJECTED);
         if (response.status == 200) {
           setUsers(response.data.data);
+          toast.success("Rejected user fetched successfully!");
+          response.data.data.length == 0 &&
+            toast.warn("No Rejected user exist!");
         }
       } catch (err: unknown) {
         if (axios.isAxiosError(err)) {
           const message =
-            err.response?.data || "Error while fetching unverified user.";
+            err.response?.data?.data || "Error while fetching rejected user.";
           toast.error(message);
         } else {
           toast.error("Something went wrong. Please try again.", {
@@ -37,7 +40,7 @@ const UnverifiedUsers: React.FC = () => {
     fetchUsers();
   }, []);
 
-  return <UserTable type="unverifiedUsers" users={users} />;
+  return <UserTable type="rejectedUser" users={users} />;
 };
 
-export default UnverifiedUsers;
+export default RejectedUser;

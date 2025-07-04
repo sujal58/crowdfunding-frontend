@@ -43,21 +43,11 @@ nav[aria-label="Dashboard Navigation"] button:focus {
   text-align: center;
 }
 
-/* .settings-submenu button {
-  width: 100%;
-  background: transparent;
-  color: #374151;
-  font-weight: 600;
+.admin-sidebar .submenu {
+  background: #d1d5dc;
+  border-radius: 0.5rem 1rem 1rem 0;
   padding: 0.5rem 1rem;
-  border-radius: 1rem;
-  text-align: center;
-} */
-
-.admin-sidebar .submenu{
-  margin-top: 1rem;
 }
-
-
 
 #settings-submenu .active {
   color: #2563eb;
@@ -70,11 +60,15 @@ nav[aria-label="Dashboard Navigation"] button:focus {
 .close {
   display: none;
 }
-.admin-sidebar .submenu button {
-  text-align: right;
+
+.admin-sidebar .submenu li {
 }
 
-.admin-sidebar .submenu button#tabUnapprovedCampaigns{
+.admin-sidebar .submenu button {
+  text-align: center;
+}
+
+.admin-sidebar .submenu button#tabUnapprovedCampaigns {
   padding: 10px;
 }
 
@@ -86,7 +80,7 @@ nav[aria-label="Dashboard Navigation"] button:focus {
 
 .admin-sidebar .submenu button.active {
   color: #2563eb;
-  background-color: white;
+  background: #f3f4f6;
   outline: none;
 }
 

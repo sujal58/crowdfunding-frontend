@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import AuthCard from "../../ui/AuthCard/AuthCard";
 import "./auth-style.css";
-import { Link, redirect, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { VscEyeClosed } from "react-icons/vsc";
 import { PiEyeClosedBold } from "react-icons/pi";
 
@@ -13,18 +13,20 @@ import type {
 import { signIn } from "@/apis/auth.api";
 import type { AxiosResponse } from "axios";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useAuth from "@/Context/AuthContext";
 
 function Login({ setCurrentPage }: any) {
   let navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
-  const { token, login } = useAuth();
-  console.log(token);
-  if (token) {
-    navigate("/user-dashboard");
-  }
+  const { token, login, roles } = useAuth();
+
+  useEffect(() => {
+    if (token && roles.includes("ROLE_CREATOR")) {
+      navigate("/user-dashboard");
+    }
+  }, []);
 
   const {
     register,

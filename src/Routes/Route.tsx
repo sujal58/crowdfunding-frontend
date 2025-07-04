@@ -28,6 +28,7 @@ import UnapprovedCampaigns from "@/components/common/Admin-Dashboard/campaign/Un
 import SuspiciousCampaigns from "@/components/common/Admin-Dashboard/campaign/SuspiousCampaign";
 import ReleasedFunds from "@/components/common/Admin-Dashboard/fund/ReleasedFunds";
 import PendingReleases from "@/components/common/Admin-Dashboard/fund/PendingReleases";
+import RejectedUser from "@/components/common/Admin-Dashboard/user/RejectedUser";
 
 export const router = createBrowserRouter([
   {
@@ -89,6 +90,7 @@ export const router = createBrowserRouter([
                 children: [
                   { index: true, Component: VerifiedUsers },
                   { path: "unverified", Component: UnverifiedUsers },
+                  { path: "rejected", Component: RejectedUser },
                 ],
               },
               {

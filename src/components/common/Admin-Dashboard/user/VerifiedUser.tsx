@@ -1,38 +1,46 @@
-import React from "react";
-import CampaignTable from "../CampaignTable";
+import React, { useEffect, useState } from "react";
+import type { AxiosResponse } from "axios";
+import type {
+  IGetUsersResponse,
+  IUserResponse,
+} from "@/interfaces/user.interface";
+import axios from "axios";
+import { toast } from "react-toastify";
+import UserTable from "../table/UserTable";
+import { getAllUserByKycStatus } from "@/apis/user.api";
+import { EKycStatus } from "@/enums";
 
 const VerifiedUsers: React.FC = () => {
-  const campaigns = [
-    {
-      id: 2,
-      username: "Jane Smith",
-      email: "janesmith@test.com",
-      status: "Approved",
-      submissionDate: "2025-05-08",
-    },
-  ];
+  const [users, setUsers] = useState<IUserResponse[]>([]);
 
-  const getActions = (campaign: any) => (
-    <button
-      className="table-btn view-btn"
-      onClick={() => handleAction(campaign.id, "View")}
-    >
-      View Details
-    </button>
-  );
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response: AxiosResponse<IGetUsersResponse> =
+          await getAllUserByKycStatus(EKycStatus.VERIFIED);
+        if (response.status == 200) {
+          setUsers(response.data.data);
+          toast.success("Verified user fetched successfully!");
+          response.data.data.length == 0 &&
+            toast.warn("No verified user exist!");
+        }
+      } catch (err: unknown) {
+        if (axios.isAxiosError(err)) {
+          const message =
+            err.response?.data?.data || "Error while fetching verified user.";
+          toast.error(message);
+        } else {
+          toast.error("Something went wrong. Please try again.", {
+            style: { background: "#fef2f2", color: "#ef4444" },
+          });
+        }
+      }
+    };
 
-  const handleAction = (id: number, action: string, reason?: string | null) => {
-    console.log(`Action ${action} on verified user ${id}, reason: ${reason}`);
-    alert(`${action} successful!`);
-  };
+    fetchUsers();
+  }, []);
 
-  return (
-    <CampaignTable
-      type="verifiedUsers"
-      campaigns={campaigns}
-      getActions={getActions}
-    />
-  );
+  return <UserTable type="verifiedUsers" users={users} />;
 };
 
 export default VerifiedUsers;

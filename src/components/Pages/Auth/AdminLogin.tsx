@@ -11,8 +11,12 @@ import { signIn } from "@/apis/auth.api";
 import { toast } from "react-toastify";
 import axios from "axios";
 import useAuth from "@/Context/AuthContext";
+import { useState } from "react";
+import { VscEyeClosed } from "react-icons/vsc";
+import { PiEyeClosedBold } from "react-icons/pi";
 
 function AdminLogin() {
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
   const {
@@ -31,12 +35,9 @@ function AdminLogin() {
     const { username, password } = data;
     try {
       const payload: ILoginRequest = { email_username: username, password };
-      console.log(data);
-      console.log(payload);
 
       const response: AxiosResponse<ILoginResponse> = await signIn(payload);
 
-      //   localStorage.setItem("user", JSON.stringify(response.data));
       console.log(response.data);
 
       if (response.status == 200) {
@@ -89,16 +90,29 @@ function AdminLogin() {
               <div className="error">{errors.username.message}</div>
             )}
           </div>
-          <div className="form-group">
+          <div className="form-group" style={{ position: "relative" }}>
             <label htmlFor="AdminPassword">Password</label>
             <input
-              type="text"
+              type={showPassword ? "text" : "password"}
               placeholder="Enter admin Password"
               aria-label="admin Password"
               {...register("password", {
                 required: "Password is required!",
               })}
             />
+            <span
+              onClick={() => setShowPassword(!showPassword)}
+              style={{
+                position: "absolute",
+                right: "10px",
+                top: "70%",
+                transform: "translateY(-50%)",
+                cursor: "pointer",
+              }}
+            >
+              {showPassword ? <VscEyeClosed /> : <PiEyeClosedBold />}
+            </span>
+
             {errors.password && (
               <div className="error">{errors.password.message}</div>
             )}
