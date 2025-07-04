@@ -66,7 +66,6 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
   // }, [activeTab, setActiveTab]);
 
   const toggleSubmenu = (tab: Tab) => {
-    console.log(tab);
     setActiveTab(tab.id);
     const submenu = tab.id.replace("tab", "").toLowerCase();
     console.log(submenu);
@@ -169,6 +168,9 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
                   tabIndex={activeTab === tab.id ? 0 : -1}
                   onClick={() => {
                     setActiveTab(tab.id);
+                    setIsUserOpen(false);
+                    setIsCampaignOpen(false);
+                    setIsFundOpen(false);
                     navigate("/admin-dashboard".concat(tab.path));
                   }}
                   className={activeTab === tab.id ? "active" : ""}

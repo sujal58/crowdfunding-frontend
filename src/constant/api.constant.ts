@@ -11,6 +11,7 @@ export const apiEndpoints = {
     createCampaignUrl: `${baseApi}/campaigns`,
     getCampaignByIdUrl: `${baseApi}/campaigns/id/`,        // append {id}
     getAllCampaignsUrl: `${baseApi}/campaigns`,
+    getCampaignByStatusUrl: `${baseApi}/campaigns`,        // append ?status=pending
     getUserCampaignsUrl: `${baseApi}/campaigns/total`,
     deleteCampaignUrl: `${baseApi}/campaigns/delete/`,     // append {id}
   
@@ -61,6 +62,7 @@ export const apiEndpoints = {
     getUserByIdUrl: `${baseApi}/users/`,                   // append {id}
     getAllUsersUrl: `${baseApi}/users`,
     getAllUserDetailsUrl: `${baseApi}/users/details`,
+    getUserByKycStatusUrl: `${baseApi}/users/user`,             //query status
     getKycStatusByUsernameUrl: `${baseApi}/users/kyc/`,    // append {username}
     deleteUserUrl: `${baseApi}/users/`,                    // append {id}
   };

@@ -15,8 +15,6 @@ const RequireAuth: React.FC<RequireAuthProp> = ({
 }: RequireAuthProp) => {
   const user: userData = JSON.parse(localStorage.getItem("userdata")!);
   const role = user?.roles;
-  console.log(role);
-  console.log(allowedRole.includes(role.toString()));
 
   if (!user) return <Navigate to="/login" replace />;
 

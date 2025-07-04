@@ -1,35 +1,57 @@
 import React from "react";
-import CampaignTable from "../CampaignTable";
+import FundTable from "../table/FundTable";
+import type { Fund } from "@/types";
 
-const ReleasedFunds: React.FC = () => {
-  const campaigns = [
+const PendingReleases: React.FC = () => {
+  const fundSamples: Fund[] = [
     {
       id: 1,
-      title: "Education for Every Child",
-      creator: "Jane Smith",
-      goal: "$2,000",
+      campaign: "Clean Water for All",
+      campaigner: "Alice Johnson",
+      amount: "5000",
+      releaseDate: "2025-06-15",
       status: "Released",
-      scheduledDate: "2025-05-12",
     },
     {
       id: 2,
-      title: "Education for Every Child",
-      creator: "Jane Smith",
-      goal: "$1,000",
-      status: "Released",
-      scheduledDate: "2025-05-05",
+      campaign: "Education for Girls",
+      campaigner: "Mohammed El-Sayed",
+      amount: "3000",
+      scheduledDate: "2025-07-10",
+      status: "Pending",
+    },
+    {
+      id: 3,
+      campaign: "Disaster Relief Fund",
+      campaigner: "Rachel Green",
+      amount: "7000",
+      status: "Held",
     },
   ];
 
-  const getActions = () => null;
+  const getActions = (campaign: any) => (
+    <>
+      <button
+        className="table-btn view-btn"
+        onClick={() => handleAction(campaign.id, "View details")}
+      >
+        View Details
+      </button>
+    </>
+  );
+
+  const handleAction = (id: number, action: string, reason?: string | null) => {
+    console.log(`Action ${action} on pending release ${id}, reason: ${reason}`);
+    alert(`${action} successful!`);
+  };
 
   return (
-    <CampaignTable
+    <FundTable
       type="releasedFunds"
-      campaigns={campaigns}
+      funds={fundSamples}
       getActions={getActions}
     />
   );
 };
 
-export default ReleasedFunds;
+export default PendingReleases;
