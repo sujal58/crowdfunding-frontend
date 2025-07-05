@@ -1,55 +1,42 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CampaignTable from "../table/CampaignTable";
-import type { Campaign } from "@/types";
+import type { GetResponse } from "@/types";
+import type { AxiosResponse } from "axios";
+import type { ICampaignResponse } from "@/interfaces/campaign.interface";
+import { getAllCampaignByStatus } from "@/apis/campaign.api";
+import { ECampaignStatus } from "@/enums";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 const SuspiciousCampaigns: React.FC = () => {
-  const campaignSamples: Campaign[] = [
-    {
-      id: 1,
-      title: "Build a School in Nepal",
-      creator: "Suman Rai",
-      email: "suman.rai@example.com",
-      goal: "20000",
-      status: "Active",
-      submissionDate: "2025-06-01",
-    },
-    {
-      id: 2,
-      title: "Women Empowerment Workshop",
-      creator: "Fatima Noor",
-      email: "fatima.noor@example.com",
-      goal: "5000",
-      status: "Pending",
-      submissionDate: "2025-07-01",
-    },
-    {
-      id: 3,
-      title: "Support for Flood Victims",
-      creator: "John Carter",
-      email: "john.carter@example.com",
-      goal: "15000",
-      status: "Suspended",
-      submissionDate: "2025-05-25",
-    },
-    {
-      id: 4,
-      title: "Free Coding Bootcamp",
-      creator: "Amina Yusuf",
-      email: "amina.yusuf@example.com",
-      goal: "10000",
-      status: "Active",
-      submissionDate: "2025-06-15",
-    },
-    {
-      id: 5,
-      title: "Healthcare Access for Rural Areas",
-      creator: "Carlos Mendoza",
-      email: "carlos.mendoza@example.com",
-      goal: "25000",
-      status: "Pending",
-      submissionDate: "2025-07-03",
-    },
-  ];
+  const [campaign, setCampaign] = useState<ICampaignResponse[]>([]);
+
+  useEffect(() => {
+    const fetchCampaign = async () => {
+      try {
+        const response: AxiosResponse<GetResponse<ICampaignResponse>> =
+          await getAllCampaignByStatus(ECampaignStatus.SUSPICIOUS);
+        if (response.status == 200) {
+          setCampaign(response.data.data);
+          response.data.data.length == 0 &&
+            toast.warn("No Suspicious campaign exist!");
+        }
+      } catch (err: unknown) {
+        if (axios.isAxiosError(err)) {
+          const message =
+            err.response?.data?.data ||
+            "Error while fetching suspicious campaign.";
+          toast.error(message);
+        } else {
+          toast.error("Something went wrong. Please try again.", {
+            style: { background: "#fef2f2", color: "#ef4444" },
+          });
+        }
+      }
+    };
+
+    fetchCampaign();
+  }, []);
 
   const getActions = (campaign: any) => (
     <>
@@ -81,8 +68,8 @@ const SuspiciousCampaigns: React.FC = () => {
 
   return (
     <CampaignTable
-      type="suspicious"
-      campaigns={campaignSamples}
+      type={ECampaignStatus.SUSPICIOUS}
+      campaigns={campaign}
       getActions={getActions}
     />
   );

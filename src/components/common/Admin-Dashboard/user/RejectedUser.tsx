@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import type { AxiosResponse } from "axios";
 import type {
-  IGetUsersResponse,
+  // IGetUsersResponse,
   IUserResponse,
 } from "@/interfaces/user.interface";
 import axios from "axios";
@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import UserTable from "../table/UserTable";
 import { getAllUserByKycStatus } from "@/apis/user.api";
 import { EKycStatus } from "@/enums";
+import type { GetResponse } from "@/types";
 
 const RejectedUser: React.FC = () => {
   const [users, setUsers] = useState<IUserResponse[]>([]);
@@ -16,7 +17,7 @@ const RejectedUser: React.FC = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response: AxiosResponse<IGetUsersResponse> =
+        const response: AxiosResponse<GetResponse<IUserResponse>> =
           await getAllUserByKycStatus(EKycStatus.REJECTED);
         if (response.status == 200) {
           setUsers(response.data.data);

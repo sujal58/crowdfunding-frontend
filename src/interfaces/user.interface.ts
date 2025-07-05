@@ -11,13 +11,12 @@ export interface IUserResponse {
     kycStatus: EKycStatus; 
     roles: Role[]; 
     createdAt: string; 
-    
   }
 
-  export interface IGetUsersResponse {
-    message: string;
-    data: IUserResponse[];
-    path: string;
-    timestamp: string;
-  }
+  // export interface GetResponse {
+  //   message: string;
+  //   data: IUserResponse[];
+  //   path: string;
+  //   timestamp: string;
+  // }
   

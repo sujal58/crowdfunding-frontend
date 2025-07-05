@@ -23,12 +23,15 @@ import CampaignIndex from "@/components/common/Admin-Dashboard/campaign/Index";
 import FundIndex from "@/components/common/Admin-Dashboard/fund/Index";
 import VerifiedUsers from "@/components/common/Admin-Dashboard/user/VerifiedUser";
 import UnverifiedUsers from "@/components/common/Admin-Dashboard/user/UnverifiedUser";
-import ApprovedCampaigns from "@/components/common/Admin-Dashboard/campaign/ApprovedCampaign";
+import ApprovedCampaigns from "@/components/common/Admin-Dashboard/campaign/ActiveCampaign";
 import UnapprovedCampaigns from "@/components/common/Admin-Dashboard/campaign/UnapprovedCampaign";
 import SuspiciousCampaigns from "@/components/common/Admin-Dashboard/campaign/SuspiousCampaign";
 import ReleasedFunds from "@/components/common/Admin-Dashboard/fund/ReleasedFunds";
 import PendingReleases from "@/components/common/Admin-Dashboard/fund/PendingReleases";
 import RejectedUser from "@/components/common/Admin-Dashboard/user/RejectedUser";
+import CompletedCampaign from "@/components/common/Admin-Dashboard/campaign/CompletedCampaign";
+import ActiveCampaign from "@/components/common/Admin-Dashboard/campaign/ActiveCampaign";
+import PendingCampaign from "@/components/common/Admin-Dashboard/campaign/PendingCampaign";
 
 export const router = createBrowserRouter([
   {
@@ -97,9 +100,11 @@ export const router = createBrowserRouter([
                 path: "campaign",
                 Component: CampaignIndex,
                 children: [
-                  { index: true, Component: ApprovedCampaigns },
+                  { index: true, Component: ActiveCampaign },
                   { path: "unapproved", Component: UnapprovedCampaigns },
                   { path: "suspious", Component: SuspiciousCampaigns },
+                  { path: "completed", Component: CompletedCampaign },
+                  { path: "pending", Component: PendingCampaign },
                 ],
               },
               { path: "notification", Component: Notifications },
