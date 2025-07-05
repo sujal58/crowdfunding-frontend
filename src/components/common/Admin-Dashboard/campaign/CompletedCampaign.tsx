@@ -8,24 +8,24 @@ import { ECampaignStatus } from "@/enums";
 import { toast } from "react-toastify";
 import axios from "axios";
 
-const UnapprovedCampaigns: React.FC = () => {
+const CompletedCampaign: React.FC = () => {
   const [campaign, setCampaign] = useState<ICampaignResponse[]>([]);
 
   useEffect(() => {
     const fetchCampaign = async () => {
       try {
         const response: AxiosResponse<GetResponse<ICampaignResponse>> =
-          await getAllCampaignByStatus(ECampaignStatus.CANCELLED);
+          await getAllCampaignByStatus(ECampaignStatus.COMPLETED);
         if (response.status == 200) {
           setCampaign(response.data.data);
           response.data.data.length == 0 &&
-            toast.warn("No rejected campaign exist!");
+            toast.warn("No Completed campaign exist!");
         }
       } catch (err: unknown) {
         if (axios.isAxiosError(err)) {
           const message =
             err.response?.data?.data ||
-            "Error while fetching rejected campaign.";
+            "Error while fetching completed campaign.";
           toast.error(message);
         } else {
           toast.error("Something went wrong. Please try again.", {
@@ -41,33 +41,28 @@ const UnapprovedCampaigns: React.FC = () => {
   const getActions = (campaign: any) => (
     <>
       <button
-        className="table-btn approve-btn"
-        onClick={() => handleAction(campaign.id, "Approve")}
-      >
-        Approve
-      </button>
-
-      <button
         className="table-btn flag-btn"
-        onClick={() => handleAction(campaign.id, "Details")}
+        onClick={() => handleAction(campaign.id, "details")}
       >
-        View details
+        View Report
       </button>
     </>
   );
 
   const handleAction = (id: number, action: string, reason?: string | null) => {
-    console.log(`Action ${action} on unapproved item ${id}, reason: ${reason}`);
+    console.log(
+      `Action ${action} on completed campaign ${id}, reason: ${reason}`
+    );
     alert(`${action} successful!`);
   };
 
   return (
     <CampaignTable
-      type={ECampaignStatus.CANCELLED}
+      type={ECampaignStatus.COMPLETED}
       campaigns={campaign}
       getActions={getActions}
     />
   );
 };
 
-export default UnapprovedCampaigns;
+export default CompletedCampaign;

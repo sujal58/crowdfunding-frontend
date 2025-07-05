@@ -8,24 +8,24 @@ import { ECampaignStatus } from "@/enums";
 import { toast } from "react-toastify";
 import axios from "axios";
 
-const UnapprovedCampaigns: React.FC = () => {
+const PendingCampaign: React.FC = () => {
   const [campaign, setCampaign] = useState<ICampaignResponse[]>([]);
 
   useEffect(() => {
     const fetchCampaign = async () => {
       try {
         const response: AxiosResponse<GetResponse<ICampaignResponse>> =
-          await getAllCampaignByStatus(ECampaignStatus.CANCELLED);
+          await getAllCampaignByStatus(ECampaignStatus.PENDING);
         if (response.status == 200) {
           setCampaign(response.data.data);
           response.data.data.length == 0 &&
-            toast.warn("No rejected campaign exist!");
+            toast.warn("No Pending campaign exist!");
         }
       } catch (err: unknown) {
         if (axios.isAxiosError(err)) {
           const message =
             err.response?.data?.data ||
-            "Error while fetching rejected campaign.";
+            "Error while fetching pending campaign.";
           toast.error(message);
         } else {
           toast.error("Something went wrong. Please try again.", {
@@ -46,12 +46,17 @@ const UnapprovedCampaigns: React.FC = () => {
       >
         Approve
       </button>
-
+      <button
+        className="table-btn reject-btn"
+        onClick={() => handleAction(campaign.id, "Reject", prompt("Reason?"))}
+      >
+        Reject
+      </button>
       <button
         className="table-btn flag-btn"
-        onClick={() => handleAction(campaign.id, "Details")}
+        onClick={() => handleAction(campaign.id, "Flag", prompt("Reason?"))}
       >
-        View details
+        Flag
       </button>
     </>
   );
@@ -63,11 +68,11 @@ const UnapprovedCampaigns: React.FC = () => {
 
   return (
     <CampaignTable
-      type={ECampaignStatus.CANCELLED}
+      type={ECampaignStatus.PENDING}
       campaigns={campaign}
       getActions={getActions}
     />
   );
 };
 
-export default UnapprovedCampaigns;
+export default PendingCampaign;

@@ -1,10 +1,11 @@
 import React from "react";
-import type { Campaign } from "@/types/index";
+import type { ICampaignResponse } from "@/interfaces/campaign.interface";
+import type { ECampaignStatus } from "@/enums";
 
 interface CampaignTableProps {
-  type: "unapproved" | "approved" | "suspicious";
-  campaigns: Campaign[];
-  getActions: (campaign: Campaign) => React.ReactNode;
+  type: ECampaignStatus;
+  campaigns: ICampaignResponse[];
+  getActions: (campaign: ICampaignResponse) => React.ReactNode;
 }
 
 const CampaignTable: React.FC<CampaignTableProps> = ({
@@ -31,8 +32,10 @@ const CampaignTable: React.FC<CampaignTableProps> = ({
           {campaigns.map((campaign) => (
             <tr key={campaign.id} className="hover:bg-blue-100">
               <td className="border border-gray-300 p-3">{campaign.title}</td>
-              <td className="border border-gray-300 p-3">{campaign.creator}</td>
-              <td className="border border-gray-300 p-3">{campaign.goal}</td>
+              <td className="border border-gray-300 p-3">{campaign.userId}</td>
+              <td className="border border-gray-300 p-3">
+                {campaign.goalAmount}
+              </td>
               <td
                 className="border border-gray-300 p-3"
                 style={{

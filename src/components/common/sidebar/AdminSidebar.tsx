@@ -121,6 +121,11 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
                   <ul
                     id={`${tab.id}-submenu`}
                     aria-label="Dashboard Navigation"
+                    style={
+                      activeTab == "tabCampaign"
+                        ? { padding: "1rem 0.2rem" }
+                        : {}
+                    }
                     className={`submenu ${
                       tab.id === "tabUser"
                         ? isUserOpen

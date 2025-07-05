@@ -1,3 +1,13 @@
+import type { ECampaignStatus } from "@/enums";
+
+
+ export interface GetResponse<T> {
+    message: string;
+    data: T[];
+    path: string;
+    timestamp: string;
+  }
+
 export type Role = {
     id: number;
     name: string;
@@ -9,7 +19,7 @@ export type Role = {
     creator: string;
     email: string;
     goal: string;
-    status: 'Active' | 'Pending' | 'Suspended';
+    status: ECampaignStatus;
     submissionDate: string;
   }
   

@@ -2,6 +2,8 @@ import type { ICampaignRequest, ICampaignResponse } from "@/interfaces/campaign.
 import type { AxiosResponse} from "axios";
 import { apiEndpoints } from "@/constant/api.constant";
 import axiosInstance from "./axios.instance";
+import type { ECampaignStatus } from "@/enums";
+import type { GetResponse } from "@/types";
 
 
 
@@ -39,5 +41,19 @@ export const createCampign = async(
    } catch (error) {
     return Promise.reject(error)
    }
+}
+
+export const getAllCampaignByStatus = async(
+    status:ECampaignStatus
+):Promise<AxiosResponse<GetResponse<ICampaignResponse>>> =>{
+    try { 
+    const response = await axiosInstance.get(
+        apiEndpoints.getCampaignByStatusUrl.concat(`?status=${status}`)
+      );
+  
+      return response;
+    } catch (error) {
+        return Promise.reject(error)
+    }
 }
   

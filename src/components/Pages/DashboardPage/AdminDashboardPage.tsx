@@ -34,6 +34,38 @@ const AdminDashboardPage: React.FC = () => {
       ],
     },
     {
+      id: "tabCampaign",
+      label: "Campaign",
+      path: "/campaign",
+      submenu: [
+        {
+          id: "tabApprovedCampaigns",
+          label: "Active Campaigns",
+          path: "/",
+        },
+        {
+          id: "tabPendingCampaigns",
+          label: "Pending Campaigns",
+          path: "/pending",
+        },
+        {
+          id: "tabUnapprovedCampaigns",
+          label: "Unapproved Campaigns",
+          path: "/unapproved",
+        },
+        {
+          id: "tabSuspiciousCampaigns",
+          label: "Suspicious Campaigns",
+          path: "/suspicious",
+        },
+        {
+          id: "tabCompletedCampaigns",
+          label: "Completed Campaigns",
+          path: "/completed",
+        },
+      ],
+    },
+    {
       id: "tabFund",
       label: "Fund",
       path: "/fund",
@@ -50,28 +82,7 @@ const AdminDashboardPage: React.FC = () => {
         },
       ],
     },
-    {
-      id: "tabCampaign",
-      label: "Campaign",
-      path: "/campaign",
-      submenu: [
-        {
-          id: "tabApprovedCampaigns",
-          label: "Approved Campaigns",
-          path: "/",
-        },
-        {
-          id: "tabUnapprovedCampaigns",
-          label: "Unapproved Campaigns",
-          path: "/unapproved",
-        },
-        {
-          id: "tabSuspiciousCampaigns",
-          label: "Suspicious Campaigns",
-          path: "/suspicious",
-        },
-      ],
-    },
+
     { id: "tabNotifications", label: "Notifications", path: "/notifications" },
   ];
 

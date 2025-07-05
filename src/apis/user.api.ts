@@ -1,10 +1,11 @@
 import { apiEndpoints } from "@/constant/api.constant";
 import axiosInstance from "./axios.instance";
-import type { IGetUsersResponse } from "@/interfaces/user.interface";
 import type { AxiosResponse } from "axios";
 import type { EKycStatus } from "@/enums";
+import type { GetResponse } from "@/types";
+import type { IUserResponse } from "@/interfaces/user.interface";
 
-export const getAllUser = async():Promise<AxiosResponse<IGetUsersResponse>> =>{
+export const getAllUser = async():Promise<AxiosResponse<GetResponse<IUserResponse>>> =>{
     try { 
     const response = await axiosInstance.get(
         apiEndpoints.getAllUsersUrl
@@ -18,7 +19,7 @@ export const getAllUser = async():Promise<AxiosResponse<IGetUsersResponse>> =>{
 
 export const getAllUserByKycStatus = async(
     status:EKycStatus
-):Promise<AxiosResponse<IGetUsersResponse>> =>{
+):Promise<AxiosResponse<GetResponse<IUserResponse>>> =>{
     try { 
     const response = await axiosInstance.get(
         apiEndpoints.getUserByKycStatusUrl.concat(`?status=${status}`)
