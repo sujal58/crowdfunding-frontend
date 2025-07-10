@@ -5,8 +5,17 @@ import WhyRiseEasy from "../common/WhyRiseEasy/WhyRiseEasy";
 import StartCampaign from "../common/StartCampign-Info/StartCampign";
 import Footer from "../common/Footer/Footer";
 import CampaignGrid from "../common/Campaign/CampaignGrid/CampaignGrid";
+import useAuth from "@/Context/AuthContext";
+import { useEffect } from "react";
 
 function Homepage() {
+  const { token, roles, logout } = useAuth();
+  useEffect(() => {
+    if (token && roles.includes("ROLE_ADMIN")) {
+      logout();
+    }
+  }, []);
+
   return (
     <>
       <Header />

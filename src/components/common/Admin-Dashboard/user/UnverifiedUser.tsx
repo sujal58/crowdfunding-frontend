@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { getAllUser, getAllUserByKycStatus } from "@/apis/user.api";
-import type {
-  IGetUsersResponse,
-  IUserResponse,
-} from "@/interfaces/user.interface";
+import { getAllUserByKycStatus } from "@/apis/user.api";
+import type { IUserResponse } from "@/interfaces/user.interface";
 import { toast } from "react-toastify";
 import axios, { type AxiosResponse } from "axios";
 import UserTable from "../table/UserTable";
 import { EKycStatus } from "@/enums";
+import type { GetResponse } from "@/types";
 
 const UnverifiedUsers: React.FC = () => {
   const [users, setUsers] = useState<IUserResponse[]>([]);
@@ -15,7 +13,7 @@ const UnverifiedUsers: React.FC = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response: AxiosResponse<IGetUsersResponse> =
+        const response: AxiosResponse<GetResponse<IUserResponse>> =
           await getAllUserByKycStatus(EKycStatus.PENDING);
         console.log(response);
         if (response.status == 200) {

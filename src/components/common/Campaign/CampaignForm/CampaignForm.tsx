@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import FileUpload from "../../../ui/FileUpload/FileUpload";
 import "./CampaignForm.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useAuth from "@/Context/AuthContext";
 import { Tooltip as ReactTooltip } from "react-tooltip";
@@ -22,7 +22,6 @@ type CampaignFormData = {
 
 function CampaignForm() {
   const { status } = useAuth();
-  const navigate = useNavigate();
   const [isVerified, setIsVerified] = useState(
     status === "VERIFIED" ? true : false
   );

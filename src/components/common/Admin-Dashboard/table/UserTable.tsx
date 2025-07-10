@@ -1,40 +1,35 @@
 import React from "react";
 import type { IUserResponse } from "@/interfaces/user.interface";
 import { EKycStatus } from "@/enums";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { changeKycStatusByAdmin } from "@/apis/kyc.api";
 
 interface UserTableProps {
   type: "verifiedUsers" | "unverifiedUsers" | "rejectedUser";
   users: IUserResponse[];
-  // getActions: (user: IUserResponse) => React.ReactNode;
 }
 
 const UserTable: React.FC<UserTableProps> = ({ type, users }) => {
-  const navigate = useNavigate();
-
   const getActions = (user: IUserResponse) => (
     <div className="flex gap-2">
       <button
         className="table-btn view-btn bg-blue-500 text-white px-2 py-1 rounded"
-        onClick={() => handleAction(user.userId, "View")}
+        onClick={() => handleAction(user, "View")}
       >
-        View Details
+        Details
       </button>
       {type === "unverifiedUsers" && (
         <>
           <button
             className="table-btn verify-btn bg-green-500 text-white px-2 py-1 rounded"
-            onClick={() => handleAction(user.userId, "Verify")}
+            onClick={() => handleAction(user, "Verify")}
           >
             Verify
           </button>
           <button
             className="table-btn reject-btn bg-red-500 text-white px-2 py-1 rounded"
-            onClick={() =>
-              handleAction(user.userId, "Reject", "KYC incomplete")
-            }
+            onClick={() => handleAction(user, "Reject", "KYC incomplete")}
           >
             Reject
           </button>
@@ -43,9 +38,7 @@ const UserTable: React.FC<UserTableProps> = ({ type, users }) => {
       {type === "verifiedUsers" && (
         <button
           className="table-btn flag-btn bg-yellow-500 text-white px-2 py-1 rounded"
-          onClick={() =>
-            handleAction(user.userId, "Flag", "Suspicious activity")
-          }
+          onClick={() => handleAction(user, "Flag", "Suspicious activity")}
         >
           Flag
         </button>
@@ -54,7 +47,7 @@ const UserTable: React.FC<UserTableProps> = ({ type, users }) => {
         <button
           className="table-btn flag-btn bg-red-500 text-white px-2 py-1 rounded"
           onClick={() =>
-            handleAction(user.userId, "Delete", "Rejected User cleaning!")
+            handleAction(user, "Delete", "Rejected User cleaning!")
           }
         >
           Delete
@@ -64,34 +57,42 @@ const UserTable: React.FC<UserTableProps> = ({ type, users }) => {
   );
 
   const handleAction = async (
-    id: number,
+    data: IUserResponse,
     action: string,
     reason?: string | null
   ) => {
-    console.log(`Action ${action} on ${type} user ${id}, reason: ${reason}`);
+    console.log(
+      `Action ${action} on ${type} user ${data.userId}, reason: ${reason}`
+    );
     try {
       if (action === "View") {
-        navigate(`/admin-dashboard/user/${id}`);
+        // openModal("kyc", data);
       } else if (action === "Verify") {
-        // await verifyUser(id);
-        toast.success(`User ${id} verified successfully`, {
-          style: { background: "#f0fdf4", color: "#22c55e" },
-        });
+        console.log("Verify started");
+        const response = await changeKycStatusByAdmin(
+          data.userId,
+          EKycStatus.VERIFIED
+        );
+        if (response.status === 200) {
+          toast.success(`User ${data.userId} verified successfully`, {
+            style: { background: "#f0fdf4", color: "#22c55e" },
+          });
+        }
       } else if (action === "Reject") {
-        toast.error(`User ${id} rejected: ${reason}`, {
+        toast.error(`User ${data.userId} rejected: ${reason}`, {
           style: { background: "#fef2f2", color: "#ef4444" },
         });
       } else if (action === "Flag") {
-        // await flagUser(id, reason);
-        toast.warn(`User ${id} flagged: ${reason}`, {
+        // await flagUser(data.userId, reason);
+        toast.warn(`User ${data.userId} flagged: ${reason}`, {
           style: { background: "#fefce8", color: "#f59e0b" },
         });
       }
     } catch (err: unknown) {
+      console.log(err);
       if (axios.isAxiosError(err)) {
         toast.error(
-          err.response?.data?.message ||
-            `Failed to ${action.toLowerCase()} user`,
+          err.response?.data.data || `Failed to ${action.toLowerCase()} user`,
           {
             style: { background: "#fef2f2", color: "#ef4444" },
           }

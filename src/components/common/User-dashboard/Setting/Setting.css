@@ -75,6 +75,7 @@
   border: none;
   cursor: pointer;
   width: fit-content;
+  margin-top: "2rem";
 }
 
 .submit-btn:hover,
@@ -109,7 +110,7 @@
   outline-offset: 2px;
 }
 
-.delete-account-section{
+.delete-account-section {
   display: flex;
   flex-direction: column;
   justify-content: center;

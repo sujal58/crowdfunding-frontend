@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
 import type { AxiosResponse } from "axios";
-import type {
-  IGetUsersResponse,
-  IUserResponse,
-} from "@/interfaces/user.interface";
+import type { IUserResponse } from "@/interfaces/user.interface";
 import axios from "axios";
 import { toast } from "react-toastify";
 import UserTable from "../table/UserTable";
 import { getAllUserByKycStatus } from "@/apis/user.api";
 import { EKycStatus } from "@/enums";
+import type { GetResponse } from "@/types";
 
 const VerifiedUsers: React.FC = () => {
   const [users, setUsers] = useState<IUserResponse[]>([]);
@@ -16,10 +14,11 @@ const VerifiedUsers: React.FC = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response: AxiosResponse<IGetUsersResponse> =
+        const response: AxiosResponse<GetResponse<IUserResponse>> =
           await getAllUserByKycStatus(EKycStatus.VERIFIED);
         if (response.status == 200) {
           setUsers(response.data.data);
+          console.log(response.data.data);
           toast.success("Verified user fetched successfully!");
           response.data.data.length == 0 &&
             toast.warn("No verified user exist!");

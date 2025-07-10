@@ -20,7 +20,7 @@ export interface ILoginRequest {
 
   export interface ILoginResponse{
     data:{
-      username: string;
+      userId: string;
       token:string;
       roles:string[];
       status:string

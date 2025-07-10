@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 
 function Profile() {
   const [isEditable, setIsEditable] = useState<boolean>(false);
+
   const { register, handleSubmit } = useForm({
     mode: "onChange",
     defaultValues: {
