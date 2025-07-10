@@ -8,6 +8,13 @@ import type { ECampaignStatus } from "@/enums";
     timestamp: string;
   }
 
+  export interface GetSignleResponse<T>{
+    message: string;
+    data: T;
+    path: string;
+    timestamp: string;
+  }
+
 export type Role = {
     id: number;
     name: string;

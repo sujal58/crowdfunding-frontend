@@ -1,26 +1,23 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDropzone } from "react-dropzone";
 import { toast } from "react-toastify";
 import "./KYCForm.css";
-
-interface KYCFormData {
-  fullName: string;
-  dob: string;
-  address: string;
-  phone: string;
-  email: string;
-}
-
-interface FileState {
-  photo: File | null;
-  front: File | null;
-  back: File | null;
-}
+import type {
+  FileState,
+  IKycRequest,
+  IKycResponse,
+  KYCFormData,
+} from "@/interfaces/kyc.interface";
+import type { AxiosResponse } from "axios";
+import { getKycByUserId, submitKyc } from "@/apis/kyc.api";
+import type { GetResponse, GetSignleResponse } from "@/types";
+import axios from "axios";
+import useAuth from "@/Context/AuthContext";
 
 function KYCForm() {
   const [kycSubmitted, setKycSubmitted] = useState(false);
-  const [kycData, setKycData] = useState<KYCFormData | null>(null);
+  const [kycData, setKycData] = useState<IKycResponse | null>(null);
   const {
     register,
     handleSubmit,
@@ -31,15 +28,17 @@ function KYCForm() {
   });
 
   const [files, setFiles] = useState<FileState>({
-    photo: null,
-    front: null,
-    back: null,
+    image: null,
+    frontDoc: null,
+    backDoc: null,
   });
 
   const [isCameraActive, setIsCameraActive] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
+
+  const { userId, status } = useAuth();
 
   const startCamera = useCallback(async () => {
     try {
@@ -75,7 +74,8 @@ function KYCForm() {
           const file = new File([blob], "captured_photo.jpg", {
             type: "image/jpeg",
           });
-          setFiles((prev) => ({ ...prev, photo: file }));
+          console.log(file);
+          setFiles((prev) => ({ ...prev, image: file }));
           stopCamera();
         }
       }, "image/jpeg");
@@ -88,40 +88,63 @@ function KYCForm() {
     }
   }, []);
 
-  const photoDropzone = useDropzone({
-    onDrop: (files: File[]) => onDrop(files, "photo"),
-    accept: { "image/*": [".jpg", ".png"] },
-    maxFiles: 1,
-  });
-
   const frontDropzone = useDropzone({
-    onDrop: (files: File[]) => onDrop(files, "front"),
+    onDrop: (files: File[]) => onDrop(files, "frontDoc"),
     accept: { "image/*": [".jpg", ".png"], "application/pdf": [".pdf"] },
     maxFiles: 1,
   });
 
   const backDropzone = useDropzone({
-    onDrop: (files: File[]) => onDrop(files, "back"),
+    onDrop: (files: File[]) => onDrop(files, "backDoc"),
     accept: { "image/*": [".jpg", ".png"], "application/pdf": [".pdf"] },
     maxFiles: 1,
   });
 
-  const submitForm = (data: KYCFormData) => {
-    if (!files.photo || !files.front || !files.back) {
+  const submitForm = async (data: KYCFormData) => {
+    if (!files.image || !files.frontDoc || !files.backDoc) {
       toast.error("Please upload all required files!", {
         style: { background: "#fef2f2", color: "#ef4444" },
       });
       return;
     }
-    const kycPayload = { ...data, ...files };
-    console.log("Submitting KYC:", kycPayload);
-    setKycData(data);
-    setKycSubmitted(true);
-    toast.success("KYC submitted successfully!", {
-      style: { background: "#f0fdf4", color: "#22c55e" },
-    });
-    reset();
-    setFiles({ photo: null, front: null, back: null });
+
+    try {
+      const kycPayload: IKycRequest = { ...data, ...files };
+
+      const response: AxiosResponse<GetResponse<IKycResponse>> =
+        await submitKyc(kycPayload);
+
+      if (response.status == 200) {
+        toast.success("Kyc submitted successfully.", {
+          style: { background: "#f0fdf4", color: "#22c55e" },
+          onClose: () => {
+            reset();
+          },
+        });
+
+        let fetchResponse: AxiosResponse<GetSignleResponse<IKycResponse>> =
+          await getKycByUserId(userId);
+        if (fetchResponse.status === 200 && fetchResponse.data.data) {
+          setKycData(fetchResponse.data.data);
+          setKycSubmitted(true);
+        }
+        reset();
+        setFiles({ image: null, frontDoc: null, backDoc: null });
+      }
+    } catch (error: unknown) {
+      console.log(error);
+      if (axios.isAxiosError(error) && error.response) {
+        const message = error.response.data?.data || "Request failed!";
+        toast.error(message, {
+          style: { background: "#fef2f2", color: "#ef4444" },
+        });
+      } else {
+        console.log(error);
+        toast.error("Something went wrong. Please try again.", {
+          style: { background: "#fef2f2", color: "#ef4444" },
+        });
+      }
+    }
   };
 
   const handleEditKyc = () => {
@@ -132,14 +155,30 @@ function KYCForm() {
     });
   };
 
+  useEffect(() => {
+    async function fetchUserKyc() {
+      let response: AxiosResponse<GetSignleResponse<IKycResponse>> =
+        await getKycByUserId(userId);
+      console.log(response.data.data);
+      if (response.status == 200 && response.data.data) {
+        setKycData(response.data.data);
+        setKycSubmitted(true);
+      }
+    }
+    fetchUserKyc();
+  }, [kycSubmitted]);
+
   return (
-    <div className="settings-section">
+    <div className="settings-section kyc-section">
       {kycSubmitted ? (
         <>
           <h3>KYC Details</h3>
           <div className="kyc-details">
             <p>
-              <strong>Full Name:</strong> {kycData?.fullName}
+              <strong>Full Name:</strong> {kycData?.name}
+            </p>
+            <p>
+              <strong>Email:</strong> {kycData?.email}
             </p>
             <p>
               <strong>Date of Birth:</strong> {kycData?.dob}
@@ -151,11 +190,14 @@ function KYCForm() {
               <strong>Phone Number:</strong> {kycData?.phone}
             </p>
             <p>
-              <strong>Email:</strong> {kycData?.email}
+              <strong>Document-Type:</strong> {kycData?.documentType}
+            </p>
+            <p>
+              <strong>Document no:</strong> {kycData?.documentNumber}
             </p>
             <p>
               <strong>Verification Status:</strong>{" "}
-              <span style={{ color: "#f59e0b" }}>Pending</span>
+              <span style={{ color: "#f59e0b" }}>{status}</span>
             </p>
             <p>
               <strong>DeepFace Confidence:</strong> 78%
@@ -166,9 +208,17 @@ function KYCForm() {
             <p>
               <strong>OCR Back Confidence:</strong> 85%
             </p>
+            <p>
+              <strong>Reviewed by:</strong>{" "}
+              <span style={{ color: "#f59e0b" }}>{kycData?.reviewedBy}</span>
+            </p>
+            <p>
+              <strong>Reviewed At:</strong>{" "}
+              <span style={{ color: "#f59e0b" }}>{kycData?.reviewedAt}</span>
+            </p>
           </div>
           <button
-            className="edit-btn"
+            className="edit-kyc"
             onClick={handleEditKyc}
             aria-label="Edit KYC"
           >
@@ -187,24 +237,25 @@ function KYCForm() {
               <label htmlFor="fullName">Full Name</label>
               <input
                 id="fullName"
-                {...register("fullName", { required: "Full Name is required" })}
+                {...register("name", { required: "Full Name is required" })}
                 placeholder="John Doe"
                 aria-required="true"
               />
-              {errors.fullName && (
-                <span className="error">{errors.fullName.message}</span>
+              {errors.name && (
+                <span className="error">{errors.name.message}</span>
               )}
             </div>
             <div className="form-group">
-              <label htmlFor="dob">Date of Birth</label>
+              <label htmlFor="email">Email</label>
               <input
-                id="dob"
-                type="date"
-                {...register("dob", { required: "Date of Birth is required" })}
+                id="email"
+                type="email"
+                {...register("email", { required: "Email is required" })}
+                placeholder="john@example.com"
                 aria-required="true"
               />
-              {errors.dob && (
-                <span className="error">{errors.dob.message}</span>
+              {errors.email && (
+                <span className="error">{errors.email.message}</span>
               )}
             </div>
             <div className="form-group">
@@ -233,49 +284,60 @@ function KYCForm() {
               )}
             </div>
             <div className="form-group">
-              <label htmlFor="email">Email</label>
+              <label htmlFor="phone">Document number: </label>
               <input
-                id="email"
-                type="email"
-                {...register("email", { required: "Email is required" })}
-                placeholder="john@example.com"
+                id="documentNo"
+                type="text"
+                {...register("documentNumber", {
+                  required: "Document number is required",
+                })}
+                placeholder="1111-a1a1-22bb"
                 aria-required="true"
               />
-              {errors.email && (
-                <span className="error">{errors.email.message}</span>
+              {errors.documentNumber && (
+                <span className="error">{errors.documentNumber.message}</span>
+              )}
+            </div>
+            <div className="form-group">
+              <label htmlFor="phone">Document Type: </label>
+              <select
+                id="documentType"
+                {...register("documentType", {
+                  required: "Document number is required",
+                })}
+                defaultValue=""
+                aria-required="true"
+              >
+                <option value="" disabled>
+                  -- Choose a Document Type --
+                </option>
+                <option value="Citizenship">Citizenship</option>
+                <option value="Passport">Passport</option>
+                <option value="NID">NID</option>
+              </select>
+              {/* <input
+                id="documentType"
+                type="text"
+                placeholder="1111-a1a1-22bb"
+                aria-required="true"
+              /> */}
+              {errors.documentType && (
+                <span className="error">{errors.documentType.message}</span>
+              )}
+            </div>
+            <div className="form-group">
+              <label htmlFor="dob">Date of Birth</label>
+              <input
+                id="dob"
+                type="date"
+                {...register("dob", { required: "Date of Birth is required" })}
+                aria-required="true"
+              />
+              {errors.dob && (
+                <span className="error">{errors.dob.message}</span>
               )}
             </div>
           </form>
-          {/* <div className="kyc-upload-section">
-            <label
-              // {...photoDropzone.getRootProps()}
-              className="upload-label"
-              tabIndex={0}
-            >
-              Upload Recent Photo
-              <input
-                {...photoDropzone.getInputProps()}
-                id="photoUpload"
-                className="hidden-file-input"
-              />
-            </label>
-            <p
-              style={{
-                fontSize: "0.9rem",
-                marginTop: "0.25rem",
-                color: "#6b7280",
-              }}
-            >
-              Accepted formats: JPG, PNG
-            </p>
-            {files.photo && (
-              <img
-                src={URL.createObjectURL(files.photo)}
-                alt="Photo Preview"
-                style={{ maxWidth: "150px", maxHeight: "100px" }}
-              />
-            )}
-          </div> */}
           <div className="kyc-upload-section">
             <h4>Capture Photo</h4>
             <div
@@ -309,9 +371,9 @@ function KYCForm() {
                 </button>
               )}
             </div>
-            {files.photo && (
+            {files.image && (
               <img
-                src={URL.createObjectURL(files.photo)}
+                src={URL.createObjectURL(files.image)}
                 alt="Captured Photo Preview"
                 style={{
                   maxWidth: "150px",
@@ -344,9 +406,9 @@ function KYCForm() {
             >
               Accepted formats: JPG, PNG, PDF
             </p>
-            {files.front && files.front.type.startsWith("image/") && (
+            {files.frontDoc && files.frontDoc.type.startsWith("image/") && (
               <img
-                src={URL.createObjectURL(files.front)}
+                src={URL.createObjectURL(files.frontDoc)}
                 alt="ID Front Preview"
                 style={{ maxWidth: "150px", maxHeight: "100px" }}
               />
@@ -374,9 +436,9 @@ function KYCForm() {
             >
               Accepted formats: JPG, PNG, PDF
             </p>
-            {files.back && files.back.type.startsWith("image/") && (
+            {files.backDoc && files.backDoc.type.startsWith("image/") && (
               <img
-                src={URL.createObjectURL(files.back)}
+                src={URL.createObjectURL(files.backDoc)}
                 alt="ID Back Preview"
                 style={{ maxWidth: "150px", maxHeight: "100px" }}
               />
@@ -387,9 +449,9 @@ function KYCForm() {
             <strong style={{ color: "#6b7280" }}>Not Submitted</strong>
           </p>
           <button
-            className="submit-btn"
+            className="submit-kyc"
             onClick={handleSubmit(submitForm)}
-            disabled={!files.photo || !files.front || !files.back}
+            disabled={!files.image || !files.frontDoc || !files.backDoc}
           >
             Submit KYC
           </button>

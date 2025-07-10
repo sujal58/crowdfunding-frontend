@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from "react";
-import { Navigate, redirect, useNavigate } from "react-router-dom";
 
 type AuthContextType = {
+  userId: string;
   token: string;
   username: string;
   roles: string[];
@@ -11,6 +11,15 @@ type AuthContextType = {
 };
 
 type userDataType = {
+  userId: string;
+  token: string;
+  // username: string;
+  roles: string[];
+  status: string;
+};
+
+type stateProps = {
+  userId: string;
   token: string;
   username: string;
   roles: string[];
@@ -18,6 +27,7 @@ type userDataType = {
 };
 
 export const authContext = createContext<AuthContextType>({
+  userId: "",
   username: "",
   token: "",
   roles: [],
@@ -27,10 +37,23 @@ export const authContext = createContext<AuthContextType>({
 });
 
 export function AuthProvider({ children }: any) {
-  const [auth, setAuth] = useState<userDataType>(() => {
+  const [auth, setAuth] = useState<stateProps>(() => {
     try {
       const saved = localStorage.getItem("userdata");
-      return saved ? JSON.parse(saved) : { token: "", username: "", roles: [] };
+      if (saved) {
+        console.log(saved);
+        const parsed = JSON.parse(saved);
+        const username = JSON.parse(atob(parsed.token.split(".")[1])).sub;
+        return { ...parsed, username };
+      } else {
+        return {
+          userId: "",
+          token: "",
+          username: "",
+          roles: [],
+          status: "", // Include all required keys from AuthContextType
+        };
+      }
     } catch (error) {
       console.error("Invalid userdata in localStorage:", error);
       return { token: "", username: "", roles: [] };
@@ -38,8 +61,10 @@ export function AuthProvider({ children }: any) {
   });
 
   const login = (userData: userDataType) => {
+    const payload = JSON.parse(atob(userData.token.split(".")[1]));
     setAuth({
-      username: userData.username,
+      userId: userData.userId,
+      username: payload.sub,
       token: userData.token,
       roles: userData.roles,
       status: userData.status,
@@ -48,7 +73,7 @@ export function AuthProvider({ children }: any) {
   };
 
   const logout = () => {
-    setAuth({ token: "", username: "", roles: [], status: "" });
+    setAuth({ token: "", username: "", roles: [], status: "", userId: "" });
     localStorage.removeItem("userdata");
   };
 

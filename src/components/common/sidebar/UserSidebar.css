@@ -84,7 +84,7 @@ nav[aria-label="Dashboard Navigation"] button:focus {
   outline: none;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 768px) {
   aside {
     width: 100%;
     border-right: none;

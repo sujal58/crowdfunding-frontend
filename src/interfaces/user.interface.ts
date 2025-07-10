@@ -13,10 +13,4 @@ export interface IUserResponse {
     createdAt: string; 
   }
 
-  // export interface GetResponse {
-  //   message: string;
-  //   data: IUserResponse[];
-  //   path: string;
-  //   timestamp: string;
-  // }
   

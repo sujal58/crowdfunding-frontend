@@ -4,10 +4,18 @@ import { Outlet } from "react-router-dom";
 import AuthHeader from "../../common/Header/AuthHeader";
 import AdminSidebar from "../../common/sidebar/AdminSidebar";
 import "./DashboardPage.css";
+import Modal from "@/components/common/Admin-Dashboard/Modal";
 
 const AdminDashboardPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState("tabMetrics");
   const [activeSubmenu, setactiveSubmenu] = useState("");
+  const [modalData, setModalData] = useState<{
+    type: string;
+    data?: any;
+  } | null>(null);
+
+  const openModal = (type: string, data?: any) => setModalData({ type, data });
+  const closeModal = () => setModalData(null);
 
   const tabs = [
     { id: "tabMetrics", label: "Metrics", path: "/" },
@@ -97,7 +105,16 @@ const AdminDashboardPage: React.FC = () => {
           activeSubmenu={activeSubmenu}
           setActiveSubmenu={setactiveSubmenu}
         />
-        <main>{<Outlet />}</main>
+        <main>
+          <Outlet context={{ openModal, closeModal }} />
+          {modalData && (
+            <Modal
+              type={modalData.type}
+              data={modalData.data}
+              onClose={closeModal}
+            />
+          )}
+        </main>
       </div>
     </div>
   );
