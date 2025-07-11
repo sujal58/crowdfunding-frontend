@@ -24,6 +24,7 @@ select {
 
 .kyc-upload-section {
   margin-bottom: 1.5rem;
+  border-radius: 1rem;
 }
 
 .upload-label {

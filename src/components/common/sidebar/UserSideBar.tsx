@@ -40,7 +40,6 @@ function UserSideBar({
   };
 
   const handleSidebarClick = (tab: Tab) => {
-    console.log(tab);
     setActiveTab(tab.id);
     setIsSettingsOpen(false);
     setNavigationUrl(tab.url);

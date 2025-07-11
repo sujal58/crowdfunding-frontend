@@ -56,4 +56,17 @@ export const getAllCampaignByStatus = async(
         return Promise.reject(error)
     }
 }
+
+
+export const getAllCampaignByUser = async():Promise<AxiosResponse<GetResponse<ICampaignResponse>>> =>{
+    try { 
+    const response = await axiosInstance.get(
+        apiEndpoints.getUserCampaignsUrl
+      );
+  
+      return response;
+    } catch (error) {
+        return Promise.reject(error)
+    }
+}
   

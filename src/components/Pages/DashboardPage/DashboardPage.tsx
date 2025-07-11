@@ -2,7 +2,7 @@ import Sidebar from "../../common/sidebar/UserSideBar.tsx";
 import Settings from "../../common/User-dashboard/Setting/Setting.tsx";
 import { useEffect, useState } from "react";
 import AuthHeader from "../../common/Header/AuthHeader.js";
-import CampaignTable from "../../common/Campaign/CampignTable/CampaignTable.tsx";
+import CampaignTable from "../../common/Campaign/CampaignTable/CampaignTable.tsx";
 import Notifications from "../../ui/Notification/Notification.tsx";
 import DonationFeed from "../../ui/Donation/DonationFeed.tsx";
 import "./DashboardPage.css";

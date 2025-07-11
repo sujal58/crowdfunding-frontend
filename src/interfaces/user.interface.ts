@@ -2,7 +2,7 @@ import type { EKycStatus } from "@/enums";
 import type { Role } from "@/types";
 
 export interface IUserResponse {
-    userId: number;
+    userId: string;
     email: string;
     name: string;
     username: string;

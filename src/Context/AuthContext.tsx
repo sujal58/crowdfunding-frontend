@@ -41,7 +41,6 @@ export function AuthProvider({ children }: any) {
     try {
       const saved = localStorage.getItem("userdata");
       if (saved) {
-        console.log(saved);
         const parsed = JSON.parse(saved);
         const username = JSON.parse(atob(parsed.token.split(".")[1])).sub;
         return { ...parsed, username };

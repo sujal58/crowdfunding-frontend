@@ -14,9 +14,11 @@ import { getKycByUserId, submitKyc } from "@/apis/kyc.api";
 import type { GetResponse, GetSignleResponse } from "@/types";
 import axios from "axios";
 import useAuth from "@/Context/AuthContext";
+import CameraButton from "@/components/ui/Button/CameraButton";
 
 function KYCForm() {
   const [kycSubmitted, setKycSubmitted] = useState(false);
+  const [kycEdit, setKycEdit] = useState(false);
   const [kycData, setKycData] = useState<IKycResponse | null>(null);
   const {
     register,
@@ -148,11 +150,8 @@ function KYCForm() {
   };
 
   const handleEditKyc = () => {
-    console.log("Editing KYC");
+    setKycEdit(true);
     setKycSubmitted(false);
-    toast.info("Editing KYC", {
-      style: { background: "#eff6ff", color: "#2563eb" },
-    });
   };
 
   useEffect(() => {
@@ -165,7 +164,8 @@ function KYCForm() {
         setKycSubmitted(true);
       }
     }
-    fetchUserKyc();
+    if (!kycEdit) fetchUserKyc();
+    else reset(kycData ?? undefined);
   }, [kycSubmitted]);
 
   return (
@@ -339,7 +339,7 @@ function KYCForm() {
             </div>
           </form>
           <div className="kyc-upload-section">
-            <h4>Capture Photo</h4>
+            {/* <h4>Capture Photo</h4> */}
             <div
               style={{ display: "flex", flexDirection: "column", gap: "10px" }}
             >
@@ -354,14 +354,15 @@ function KYCForm() {
               />
               <canvas ref={canvasRef} style={{ display: "none" }} />
               {!isCameraActive ? (
-                <button
-                  onClick={startCamera}
-                  className="upload-label"
-                  style={{ width: "fit-content" }}
-                >
-                  Start Camera
-                </button>
+                <CameraButton onClick={startCamera} />
               ) : (
+                // <button
+                //   onClick={startCamera}
+                //   className="upload-label"
+                //   style={{ width: "fit-content" }}
+                // >
+                //   Start Camera
+                // </button>
                 <button
                   onClick={capturePhoto}
                   className="upload-label"

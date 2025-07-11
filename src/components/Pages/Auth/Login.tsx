@@ -26,7 +26,7 @@ function Login({ setCurrentPage }: any) {
     if (token && roles.includes("ROLE_CREATOR")) {
       navigate("/user-dashboard");
     }
-  }, []);
+  }, [token]);
 
   const {
     register,
