@@ -2,7 +2,7 @@ import { apiEndpoints } from "@/constant/api.constant";
 import axiosInstance from "./axios.instance";
 import type { AxiosResponse } from "axios";
 import type { EKycStatus } from "@/enums";
-import type { GetResponse } from "@/types";
+import type { GetResponse, GetSignleResponse } from "@/types";
 import type { IUserResponse } from "@/interfaces/user.interface";
 
 export const getAllUser = async():Promise<AxiosResponse<GetResponse<IUserResponse>>> =>{
@@ -23,6 +23,20 @@ export const getAllUserByKycStatus = async(
     try { 
     const response = await axiosInstance.get(
         apiEndpoints.getUserByKycStatusUrl.concat(`?status=${status}`)
+      );
+  
+      return response;
+    } catch (error) {
+        return Promise.reject(error)
+    }
+}
+
+export const getCurrentUser = async(
+    userId: string
+):Promise<AxiosResponse<GetSignleResponse<IUserResponse>>> =>{
+    try { 
+    const response = await axiosInstance.get(
+        apiEndpoints.getUserByIdUrl.concat(userId)
       );
   
       return response;

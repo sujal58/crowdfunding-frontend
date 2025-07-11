@@ -59,7 +59,8 @@ export const apiEndpoints = {
     deleteTagUrl: `${baseApi}/tags/`,                      // append {id}
   
     // Users
-    getUserByIdUrl: `${baseApi}/users/`,                   // append {id}
+    getUserByIdUrl: `${baseApi}/users/`,  
+    getCurrentUser: `${baseApi}/users`,                 // append {id}
     getAllUsersUrl: `${baseApi}/users`,
     getAllUserDetailsUrl: `${baseApi}/users/details`,
     getUserByKycStatusUrl: `${baseApi}/users/user`,             //query status

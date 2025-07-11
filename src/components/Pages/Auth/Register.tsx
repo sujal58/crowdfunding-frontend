@@ -23,7 +23,7 @@ function Signup({ setCurrentPage }: any) {
       username: "",
       email: "",
       password: "",
-      confirmPassword: "",
+      // confirmPassword: "",
       roles: "",
     },
   });
@@ -149,23 +149,6 @@ function Signup({ setCurrentPage }: any) {
             />
             {errors.password && (
               <div className="error">{errors.password.message}</div>
-            )}
-          </div>
-          <div className="form-group">
-            <label htmlFor="signupConfirmPassword">Confirm Password</label>
-            <input
-              type="password"
-              id="signupConfirmPassword"
-              placeholder="Confirm your password"
-              aria-label="Confirm Password"
-              {...register("confirmPassword", {
-                required: "Confirm password is required",
-                validate: (value) =>
-                  value === watch("password") || "Passwords do not match.",
-              })}
-            />
-            {errors.confirmPassword && (
-              <div className="error">{errors.confirmPassword.message}</div>
             )}
           </div>
           <div className="form-group">

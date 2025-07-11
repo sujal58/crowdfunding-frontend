@@ -5,7 +5,7 @@ import Login from "../components/Pages/Auth/Login";
 import Register from "../components/Pages/Auth/Register";
 import DashboardPage from "../components/Pages/DashboardPage/DashboardPage";
 import AdminDashboardPage from "../components/Pages/DashboardPage/AdminDashboardPage";
-import CampaignTable from "../components/common/Campaign/CampignTable/CampaignTable";
+import CampaignTable from "../components/common/Campaign/CampaignTable/CampaignTable";
 import DonationFeed from "../components/ui/Donation/DonationFeed";
 import DashboardCampign from "../components/common/User-dashboard/DashboardCampign/DashboardCampaign";
 import Settings from "../components/common/User-dashboard/Setting/Setting";

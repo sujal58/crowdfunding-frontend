@@ -1,17 +1,62 @@
-import { useState } from "react";
+import { getCurrentUser } from "@/apis/user.api";
+import useAuth from "@/Context/AuthContext";
+import { EKycStatus } from "@/enums";
+import type { IUserResponse } from "@/interfaces/user.interface";
+import type { GetSignleResponse } from "@/types";
+import type { AxiosResponse } from "axios";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
 function Profile() {
   const [isEditable, setIsEditable] = useState<boolean>(false);
+  const { userId } = useAuth();
+  const [user, setUser] = useState<IUserResponse>({
+    userId: "",
+    email: "",
+    name: "",
+    username: "",
+    country: "",
+    city: "",
+    kycStatus: EKycStatus.PENDING,
+    roles: [],
+    createdAt: "",
+  });
 
-  const { register, handleSubmit } = useForm({
+  useEffect(() => {
+    const fetchCampaign = async () => {
+      try {
+        const response: AxiosResponse<GetSignleResponse<IUserResponse>> =
+          await getCurrentUser(userId);
+
+        if (response.status == 200) {
+          const userData = response.data.data;
+
+          setUser(response.data.data);
+          reset({
+            name: userData.name,
+            username: userData.username,
+            email: userData.email,
+          });
+        }
+      } catch (err: unknown) {
+        if (axios.isAxiosError(err)) {
+          const message = err.response?.data?.data;
+          toast.error(message);
+        } else {
+          toast.error("Something went wrong. Please try again.", {
+            style: { background: "#fef2f2", color: "#ef4444" },
+          });
+        }
+      }
+    };
+
+    fetchCampaign();
+  }, []);
+
+  const { register, handleSubmit, reset } = useForm({
     mode: "onChange",
-    defaultValues: {
-      username: "johndoe",
-      email: "john@example.com",
-      contact: "+1234567890",
-    },
   });
 
   const onSubmit = (data: any) => {
@@ -26,6 +71,15 @@ function Profile() {
     <div className="settings-section">
       <h3>Profile</h3>
       <form className="profile-form" onSubmit={handleSubmit(onSubmit)}>
+        <div className="form-group">
+          <label htmlFor="username">Name</label>
+          <input
+            id="username"
+            {...register("name")}
+            readOnly={!isEditable}
+            aria-label="Username"
+          />
+        </div>
         <div className="form-group">
           <label htmlFor="username">Username</label>
           <input
@@ -45,7 +99,7 @@ function Profile() {
             aria-label="Email"
           />
         </div>
-        <div className="form-group">
+        {/* <div className="form-group">
           <label htmlFor="contact">Contact Number</label>
           <input
             id="contact"
@@ -54,7 +108,7 @@ function Profile() {
             readOnly={!isEditable}
             aria-label="Contact Number"
           />
-        </div>
+        </div> */}
         <button type="submit" className="submit-btn" aria-label="Edit Profile">
           {isEditable ? "Save changes" : "Edit Profile"}
         </button>
