@@ -1,6 +1,6 @@
 import type { EKycStatus } from "@/enums";
 import type { IKycRequest, IKycResponse } from "@/interfaces/kyc.interface";
-import type { GetSignleResponse, GetResponse } from "@/types";
+import type { GetSingleResponse, GetResponse } from "@/types";
 import type { AxiosResponse } from "axios";
 import axiosInstance from "./axios.instance";
 import { apiEndpoints } from "@/constant/api.constant";
@@ -55,7 +55,7 @@ export const changeKycStatusByAdmin = async(
 
 export const getKycByUserId = async(
       userId:string
-    ):Promise<AxiosResponse<GetSignleResponse<IKycResponse>>> => {
+    ):Promise<AxiosResponse<GetSingleResponse<IKycResponse>>> => {
       try {
         const response = await axiosInstance.get(
           apiEndpoints.getKycByUserIdUrl.concat(userId)

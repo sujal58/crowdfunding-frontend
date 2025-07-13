@@ -9,6 +9,24 @@
   margin: 1rem;
 }
 
+.auth-card .cancel-btn {
+  background: rgb(230, 228, 228);
+  color: rgb(49, 48, 48);
+  margin-top: 0.3rem;
+}
+
+.auth-card .cancel-btn:focus {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+  border-color: #2563eb;
+}
+
+.auth-card .cancel-btn:hover {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+  border-color: #2563eb;
+}
+
 /* Responsive */
 @media (max-width: 600px) {
   .auth-card {

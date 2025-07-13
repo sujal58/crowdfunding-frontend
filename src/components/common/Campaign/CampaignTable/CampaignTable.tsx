@@ -16,8 +16,6 @@ function CampaignTable() {
           await getAllCampaignByUser();
         if (response.status == 200) {
           setCampaigns(response.data.data);
-          response.data.data.length == 0 &&
-            toast.warn("No Active campaign exist!");
         }
       } catch (err: unknown) {
         if (axios.isAxiosError(err)) {

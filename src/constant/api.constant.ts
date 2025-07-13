@@ -1,3 +1,4 @@
+
 export const baseApi = import.meta.env.VITE_API_URL;
 
 
@@ -57,6 +58,11 @@ export const apiEndpoints = {
     createTagUrl: `${baseApi}/tags`,
     getAllTagsUrl: `${baseApi}/tags`,
     deleteTagUrl: `${baseApi}/tags/`,                      // append {id}
+
+
+    //otp
+    generateAndSendOtp: `${baseApi}/otp/generate`,      //email=
+    verifyOtp: `${baseApi}/otp/verify`,                  //?email & otp
   
     // Users
     getUserByIdUrl: `${baseApi}/users/`,  
@@ -66,4 +72,5 @@ export const apiEndpoints = {
     getUserByKycStatusUrl: `${baseApi}/users/user`,             //query status
     getKycStatusByUsernameUrl: `${baseApi}/users/kyc/`,    // append {username}
     deleteUserUrl: `${baseApi}/users/`,                    // append {id}
+    resetPasswordUrl: `${baseApi}/users/reset-password`
   };

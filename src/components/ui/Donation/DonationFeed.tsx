@@ -22,7 +22,6 @@ function DonationFeed() {
         console.log(response);
         if (response.status == 200) {
           setDonations(response.data.data);
-          response.data.data.length == 0 && toast.warn("No donation exist!");
         }
       } catch (err: unknown) {
         if (axios.isAxiosError(err)) {

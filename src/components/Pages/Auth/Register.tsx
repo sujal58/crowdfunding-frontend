@@ -13,8 +13,6 @@ function Signup({ setCurrentPage }: any) {
   const {
     register,
     handleSubmit,
-    setValue,
-    watch,
     formState: { errors },
     reset,
   } = useForm({
@@ -26,6 +24,7 @@ function Signup({ setCurrentPage }: any) {
       // confirmPassword: "",
       roles: "",
     },
+    mode: "onChange",
   });
 
   const onSubmit = async (data: any) => {
@@ -151,7 +150,7 @@ function Signup({ setCurrentPage }: any) {
               <div className="error">{errors.password.message}</div>
             )}
           </div>
-          <div className="form-group">
+          {/* <div className="form-group">
             <label htmlFor="signupRole">Role</label>
             <select
               id="signupRole"
@@ -167,7 +166,7 @@ function Signup({ setCurrentPage }: any) {
             {errors.roles && (
               <div className="error">{errors.roles.message}</div>
             )}
-          </div>
+          </div> */}
           <button type="submit" className="submit-btn" aria-label="Sign up">
             Sign Up
           </button>
