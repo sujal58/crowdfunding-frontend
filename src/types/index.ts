@@ -8,7 +8,7 @@ import type { ECampaignStatus } from "@/enums";
     timestamp: string;
   }
 
-  export interface GetSignleResponse<T>{
+  export interface GetSingleResponse<T>{
     message: string;
     data: T;
     path: string;
@@ -39,5 +39,12 @@ export type Role = {
     releaseDate?: string; 
     scheduledDate?: string; 
     status: 'Released' | 'Pending' | 'Held' | 'Canceled';
+  }
+
+  export type resetPasswordType = {
+    message:string,
+    email:string, 
+    newPassword:string
+    oldPassword?:string,
   }
   

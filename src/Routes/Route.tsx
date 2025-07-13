@@ -32,6 +32,7 @@ import RejectedUser from "@/components/common/Admin-Dashboard/user/RejectedUser"
 import CompletedCampaign from "@/components/common/Admin-Dashboard/campaign/CompletedCampaign";
 import ActiveCampaign from "@/components/common/Admin-Dashboard/campaign/ActiveCampaign";
 import PendingCampaign from "@/components/common/Admin-Dashboard/campaign/PendingCampaign";
+import ForgotPassword from "@/components/Pages/forgotPassword/ForgotPassword";
 
 export const router = createBrowserRouter([
   {
@@ -49,6 +50,10 @@ export const router = createBrowserRouter([
   {
     path: "/register",
     Component: Register,
+  },
+  {
+    path: "/forgot-password",
+    Component: ForgotPassword,
   },
   {
     Component: AuthLayout,

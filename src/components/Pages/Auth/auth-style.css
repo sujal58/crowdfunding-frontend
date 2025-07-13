@@ -8,7 +8,7 @@ body,
 }
 
 .authPage {
-  height: auto;
+  height: 90vh;
 }
 
 .authPage input,

@@ -26,7 +26,7 @@ function Login({ setCurrentPage }: any) {
     if (token && roles.includes("ROLE_CREATOR")) {
       navigate("/user-dashboard");
     }
-  }, [token]);
+  }, [token, roles]);
 
   const {
     register,
@@ -94,7 +94,10 @@ function Login({ setCurrentPage }: any) {
   };
 
   return (
-    <div className="authPage flex items-center justify-center">
+    <div
+      className="authPage flex items-center justify-center"
+      style={{ height: "90vh" }}
+    >
       <AuthCard id="loginPage">
         <h1>Log In</h1>
         <form id="loginForm" onSubmit={handleSubmit(onSubmit)}>
@@ -169,13 +172,8 @@ function Login({ setCurrentPage }: any) {
           </button>
         </form>
         <div className="auth-links">
-          <a
-            href="#resetRequest"
-            onClick={() => setCurrentPage("resetRequest")}
-          >
-            Forgot password?
-          </a>{" "}
-          | Don’t have an account?{" "}
+          <Link to={"/forgot-password"}>Forgot password?</Link> | Don’t have an
+          account?{" "}
           <Link to="/register" onClick={() => setCurrentPage("signup")}>
             Sign up
           </Link>

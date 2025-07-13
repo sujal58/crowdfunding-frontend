@@ -1,4 +1,3 @@
-import type { ICampaignResponse } from "@/interfaces/campaign.interface";
 import type { GetResponse } from "@/types";
 import type { AxiosResponse } from "axios";
 import axiosInstance from "./axios.instance";
