@@ -1,4 +1,6 @@
+import { useState } from "react";
 import "./CampignCard.css";
+import DonationCard from "../Donation/DonationCard";
 
 type cardProps = {
   title: string;
@@ -7,6 +9,7 @@ type cardProps = {
   goal: number;
   progress: number;
   image: string;
+  onDonate: (amount: number, customAmount?: number) => void;
 };
 
 function CampaignCard({
@@ -16,7 +19,17 @@ function CampaignCard({
   goal,
   progress,
   image,
+  onDonate,
 }: cardProps) {
+  const [isDonationOpen, setIsDonationOpen] = useState(false);
+
+  const handleDonateClick = () => {
+    setIsDonationOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsDonationOpen(false);
+  };
   return (
     <article className="campaign-card">
       <img src={image} alt={`Image of ${title}`} className="campaign-image" />
@@ -31,8 +44,16 @@ function CampaignCard({
             className="progress-bar-fill"
           ></div>
         </div>
-        <button className="donate-btn">Donate</button>
+        <button className="donate-btn" onClick={handleDonateClick}>
+          Donate
+        </button>
       </div>
+      <DonationCard
+        campaignName={title}
+        isOpen={isDonationOpen}
+        onClose={handleCloseModal}
+        onDonate={onDonate}
+      />
     </article>
   );
 }

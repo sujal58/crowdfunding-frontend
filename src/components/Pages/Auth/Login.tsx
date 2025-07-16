@@ -5,7 +5,6 @@ import "./auth-style.css";
 import { Link, useNavigate } from "react-router-dom";
 import { VscEyeClosed } from "react-icons/vsc";
 import { PiEyeClosedBold } from "react-icons/pi";
-
 import type {
   ILoginRequest,
   ILoginResponse,
@@ -23,7 +22,7 @@ function Login({ setCurrentPage }: any) {
   const { token, login, roles } = useAuth();
 
   useEffect(() => {
-    if (token && roles.includes("ROLE_CREATOR")) {
+    if (token && roles.includes("ROLE_USER")) {
       navigate("/user-dashboard");
     }
   }, [token, roles]);
@@ -45,7 +44,6 @@ function Login({ setCurrentPage }: any) {
       console.log(payload);
 
       const response: AxiosResponse<ILoginResponse> = await signIn(payload);
-      console.log(response.data.data);
 
       if (response.status == 200) {
         if (response.data.data.roles.includes("ROLE_ADMIN")) {

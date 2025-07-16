@@ -43,6 +43,14 @@ function DashboardCampign() {
     },
   ];
 
+  const handleDonate = (amount: number, customAmount?: number) => {
+    console.log(
+      `Donated $${amount}${customAmount ? ` (custom: $${customAmount})` : ""}`
+    );
+
+    alert("Donation processed successfully!");
+  };
+
   return (
     <div className="dashboard-campaignGrid">
       <h2 className="campaign-grid-heading">Campaigns</h2>
@@ -57,6 +65,7 @@ function DashboardCampign() {
               goal={value.goal}
               progress={value.progress}
               image={value.image}
+              onDonate={handleDonate}
             />
           );
         })}

@@ -7,10 +7,10 @@ import App from "./App.tsx";
 import { AuthProvider } from "./Context/AuthContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
-  // <StrictMode>
-  <AuthProvider>
-    <App />
-    <ToastContainer autoClose={2000} />
-  </AuthProvider>
-  // </StrictMode>
+  <StrictMode>
+    <AuthProvider>
+      <App />
+      <ToastContainer autoClose={2000} />
+    </AuthProvider>
+  </StrictMode>
 );
