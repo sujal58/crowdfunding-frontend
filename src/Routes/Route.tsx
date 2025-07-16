@@ -59,7 +59,7 @@ export const router = createBrowserRouter([
     Component: AuthLayout,
     children: [
       {
-        element: <RequireAuth allowedRole={["ROLE_USER", "ROLE_CREATOR"]} />,
+        element: <RequireAuth allowedRole={["ROLE_USER"]} />,
         children: [
           {
             path: "/user-dashboard",
