@@ -30,7 +30,13 @@ function AuthHeader() {
       </h1> */}
       <header className="header">
         <h1 className="header-logo" onClick={() => navigate(navigateLink)}>
-          fundSaathi
+          {/* fundSaathi */}
+          <img
+            src="/longlogo.png"
+            alt="Logo of fundSaathi"
+            height={200}
+            width={200}
+          />
         </h1>
         <label>
           Welcome, {username} {status === "VERIFIED" && <MdVerifiedUser />}

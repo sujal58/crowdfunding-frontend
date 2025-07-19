@@ -1,21 +1,37 @@
 import React, { useState, useEffect } from "react";
 import "./DonationCard.css";
+import { toast } from "react-toastify";
+import type { IPaymentIntentRequest } from "@/interfaces/payment.interface";
+import { InitiatePayment } from "@/apis/payment.api";
+import { useNavigate } from "react-router-dom";
 
 interface DonationCardProps {
-  campaignName: string; // Name of the campaign
-  isOpen: boolean; // Controlled visibility
-  onClose: () => void; // Callback to close the modal
-  onDonate: (amount: number, customAmount?: number) => void; // Callback for donation submission
+  campaignId: number;
+  campaignName: string;
+  isOpen: boolean;
+  onClose: () => void;
+  onDonate: (amount: number, customAmount?: number) => void;
+  // setClientSecret: (secret: string) => void;
+  // showPaymentModal: () => void;
 }
 
 const DonationCard: React.FC<DonationCardProps> = ({
+  campaignId,
   campaignName,
   isOpen,
   onClose,
-  onDonate,
+  // onDonate,
+  // setClientSecret,
+  // showPaymentModal,
 }) => {
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
   const [customAmount, setCustomAmount] = useState<number | "">("");
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
+
+  // const { username } = useAuth();
 
   useEffect(() => {
     if (!isOpen) {
@@ -35,14 +51,56 @@ const DonationCard: React.FC<DonationCardProps> = ({
     if (value !== "") setSelectedAmount(null);
   };
 
-  const handleDonate = () => {
+  const handleDonate = async () => {
+    setError(null);
+    setLoading(true);
+
     const amountToDonate = customAmount !== "" ? customAmount : selectedAmount;
-    if (amountToDonate && amountToDonate > 0) {
-      onDonate(amountToDonate, customAmount !== "" ? customAmount : undefined);
-      onClose();
-    } else {
+
+    if (!amountToDonate || isNaN(amountToDonate) || amountToDonate <= 0) {
       alert("Please select or enter a valid amount.");
+      setLoading(false);
+      return;
     }
+
+    try {
+      const payload: IPaymentIntentRequest = {
+        email: "pandeysujal258@gmail.com",
+        campaignId: campaignId,
+        amount: amountToDonate,
+      };
+
+      const response = await InitiatePayment(payload);
+
+      console.log(response);
+
+      handleAmountSubmit(response.data.data.clientSecret);
+      // onDonate(
+      //   Number(amountToDonate),
+      //   customAmount !== "" ? customAmount : undefined
+      // );
+      // onClose();
+    } catch (err) {
+      console.log(err);
+      console.error("Error fetching clientSecret:", err);
+      setError("Failed to initiate payment");
+      toast.error("Failed to initiate payment");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAmountSubmit = (clientSecret: string) => {
+    // setClientSecret(clientSecret);
+    // showPaymentModal();
+    onClose();
+    navigate("/user-dashboard/payment", {
+      state: {
+        clientSecret,
+        campaignName: campaignName,
+        userEmail: "pandeysujal258@gmail.com",
+      },
+    });
   };
 
   if (!isOpen) return null;
@@ -99,10 +157,11 @@ const DonationCard: React.FC<DonationCardProps> = ({
             id="submitDonationBtn"
             onClick={handleDonate}
           >
-            Donate
+            {loading ? "Processing..." : "Donate"}
           </button>
         </div>
       </div>
+      {error && <label>{error}</label>}
     </div>
   );
 };

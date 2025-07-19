@@ -33,6 +33,8 @@ import CompletedCampaign from "@/components/common/Admin-Dashboard/campaign/Comp
 import ActiveCampaign from "@/components/common/Admin-Dashboard/campaign/ActiveCampaign";
 import PendingCampaign from "@/components/common/Admin-Dashboard/campaign/PendingCampaign";
 import ForgotPassword from "@/components/Pages/forgotPassword/ForgotPassword";
+import PaymentPage from "@/components/Pages/PaymentPage";
+import PaymentSuccess from "@/components/Pages/PaymentSuccess";
 
 export const router = createBrowserRouter([
   {
@@ -79,6 +81,8 @@ export const router = createBrowserRouter([
               },
               { path: "notification", Component: Notifications },
               { path: "create-campaign", Component: CampaignForm },
+              { path: "payment", Component: PaymentPage },
+              { path: "payment-complete", Component: PaymentSuccess },
             ],
           },
         ],
@@ -117,6 +121,7 @@ export const router = createBrowserRouter([
           },
         ],
       },
+      // { path: "payment", Component: PaymentPage },
     ],
   },
   {

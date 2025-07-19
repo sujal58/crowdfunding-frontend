@@ -6,7 +6,13 @@ function Header() {
   return (
     <header className="header" aria-label="Main navigation">
       <div className="header-logo" onClick={() => navigate("/")}>
-        fundSaathi
+        {/* fundSaathi */}
+        <img
+          src="/longlogo.png"
+          alt="Logo of fundSaathi"
+          height={200}
+          width={200}
+        />
       </div>
       <div className="auth-btn">
         <button className="btn-login" onClick={() => navigate("/login")}>

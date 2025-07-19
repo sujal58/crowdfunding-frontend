@@ -1,8 +1,9 @@
 import { useState } from "react";
 import "./CampignCard.css";
-import DonationCard from "../Donation/DonationCard";
+import DonationCard from "@/components/common/modal/DonationCard";
 
 type cardProps = {
+  campaignId: number;
   title: string;
   description: string;
   creator: string;
@@ -13,6 +14,7 @@ type cardProps = {
 };
 
 function CampaignCard({
+  campaignId,
   title,
   description,
   creator,
@@ -21,15 +23,16 @@ function CampaignCard({
   image,
   onDonate,
 }: cardProps) {
-  const [isDonationOpen, setIsDonationOpen] = useState(false);
+  const [showAmountModal, setShowAmountModal] = useState(false);
 
   const handleDonateClick = () => {
-    setIsDonationOpen(true);
+    setShowAmountModal(true);
   };
 
   const handleCloseModal = () => {
-    setIsDonationOpen(false);
+    setShowAmountModal(false);
   };
+
   return (
     <article className="campaign-card">
       <img src={image} alt={`Image of ${title}`} className="campaign-image" />
@@ -48,12 +51,28 @@ function CampaignCard({
           Donate
         </button>
       </div>
-      <DonationCard
-        campaignName={title}
-        isOpen={isDonationOpen}
-        onClose={handleCloseModal}
-        onDonate={onDonate}
-      />
+      {showAmountModal && (
+        <DonationCard
+          campaignId={campaignId}
+          campaignName={title}
+          isOpen={showAmountModal}
+          onClose={handleCloseModal}
+          // showPaymentModal={handlePaymentModal}
+          onDonate={onDonate}
+          // setClientSecret={setClientSecret}
+        />
+      )}
+
+      {/* {showPaymentModal && clientSecret && (
+        <div className="w-full bg-transparent h-full absolute mx-auto">
+          <Elements stripe={stripePromise} options={{ clientSecret }}>
+            <PaymentModal
+              // clientSecret={clientSecret}
+              // onClose={() => setShowPaymentModal(false)}
+            />
+          </Elements>
+        </div>
+      )} */}
     </article>
   );
 }

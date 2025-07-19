@@ -3,9 +3,9 @@ export interface ICampaignRequest {
   description: string;
   goalAmount: number;
   tags?: string[];
-  category?:string;
-  campaignImage: File;           
-  supportingImages?: File[];    
+  category?: string;
+  campaignImage: File;
+  supportingImages?: File[];
   userId?: number;
 }
   

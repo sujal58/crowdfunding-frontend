@@ -9,7 +9,6 @@ type fileData = {
 };
 
 function FileUpload({ setValue, error, name, isMultiple, getValues }: any) {
-  //for ui rendering
   const [filename, setFilename] = useState<fileData[]>([]);
 
   //method to delete image
@@ -40,14 +39,25 @@ function FileUpload({ setValue, error, name, isMultiple, getValues }: any) {
     multiple: isMultiple,
     onDrop: (acceptedFiles) => {
       if (acceptedFiles.length > 0) {
-        setValue(name, acceptedFiles, { shouldValidate: true });
-        setFilename((prev) => [
-          ...prev,
-          ...acceptedFiles.map((file, index) => ({
-            id: index,
-            name: file.name,
-          })),
-        ]);
+        console.log("is multiple check: ", isMultiple);
+        if (isMultiple) {
+          setValue(name, acceptedFiles, { shouldValidate: true });
+          setFilename((prev) => [
+            ...prev,
+            ...acceptedFiles.map((file, index) => ({
+              id: index,
+              name: file.name,
+            })),
+          ]);
+        } else {
+          setValue(name, acceptedFiles[0], { shouldValidate: true });
+          setFilename([
+            {
+              id: 0,
+              name: acceptedFiles[0].name,
+            },
+          ]);
+        }
       }
     },
   });
