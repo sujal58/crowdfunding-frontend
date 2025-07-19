@@ -12,7 +12,7 @@ import type {
 import { signIn } from "@/apis/auth.api";
 import type { AxiosResponse } from "axios";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useAuth from "@/Context/AuthContext";
 
 function Login({ setCurrentPage }: any) {
@@ -21,11 +21,11 @@ function Login({ setCurrentPage }: any) {
 
   const { token, login, roles } = useAuth();
 
-  useEffect(() => {
-    if (token && roles.includes("ROLE_USER")) {
-      navigate("/user-dashboard");
-    }
-  }, [token, roles]);
+  // useEffect(() => {
+  //   if (token && roles.includes("ROLE_USER")) {
+  //     navigate("/user-dashboard");
+  //   }
+  // }, [token, roles]);
 
   const {
     register,
@@ -57,7 +57,8 @@ function Login({ setCurrentPage }: any) {
             reset();
           },
         });
-        login(response.data.data);
+        const responseData = response.data.data;
+        login(responseData);
         navigate("/user-dashboard");
       }
     } catch (error: unknown) {

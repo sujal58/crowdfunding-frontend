@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from "react";
 import "./UserSideBar.css";
+import { useNavigate } from "react-router-dom";
 
 interface Tab {
   id: string;
@@ -26,6 +27,7 @@ function UserSideBar({
   setNavigationUrl,
 }: SidebarProps) {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const navigate = useNavigate();
 
   const toggleSettings = () => {
     setIsSettingsOpen(!isSettingsOpen);
@@ -34,7 +36,7 @@ function UserSideBar({
   const handleSettingsTabClick = (settingsTab: string) => {
     setActiveTab("tabSettings");
     setActiveSettingsTab(settingsTab);
-    setNavigationUrl(
+    navigate(
       settingsTab === "profile" ? "setting" : `setting/${settingsTab}`
     );
   };
@@ -42,7 +44,8 @@ function UserSideBar({
   const handleSidebarClick = (tab: Tab) => {
     setActiveTab(tab.id);
     setIsSettingsOpen(false);
-    setNavigationUrl(tab.url);
+    navigate(tab.url);
+    // setNavigationUrl(tab.url);
   };
 
   const settingsSubmenu = [

@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import FileUpload from "../../../ui/FileUpload/FileUpload";
 import "./CampaignForm.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useAuth from "@/Context/AuthContext";
 import { Tooltip as ReactTooltip } from "react-tooltip";
@@ -28,6 +28,8 @@ function CampaignForm() {
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState("");
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     setIsVerified(status === "VERIFIED" ? true : false);
   }, [status]);
@@ -39,7 +41,9 @@ function CampaignForm() {
     setValue,
     getValues,
     formState: { errors },
-  } = useForm<CampaignFormData>();
+  } = useForm<CampaignFormData>({
+    mode: "onChange",
+  });
 
   const handleImageDrop = (file: File) => {
     setValue("campaignImage", file, { shouldValidate: true });
@@ -71,18 +75,18 @@ function CampaignForm() {
   const onSubmit = async (data: CampaignFormData) => {
     try {
       const payload: ICampaignRequest = data;
-      console.log(payload);
+      console.log(payload.campaignImage);
       const response = await createCampign(payload);
       console.log(response);
       if (response.status == 200) {
         toast.success("Campaign submitted for review!", {
           style: { background: "#f0fdf4", color: "#22c55e" },
           onClose: () => {
-            // reset();
-            // setTags([]);
+            reset();
+            setTags([]);
           },
         });
-        // navigate("/user-dashboard");
+        navigate("/user-dashboard");
       }
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
@@ -230,12 +234,13 @@ function CampaignForm() {
 
         <div className="form-group">
           <label htmlFor="campaignImage">Campaign Image</label>
-          <input
-            type="hidden"
+          {/* <input
+            type="file"
+            style={{ display: "none" }}
             {...register("campaignImage", {
               required: "Campaign image is required",
             })}
-          />
+          /> */}
           <FileUpload
             id="campaignImage"
             name="campaignImage"
@@ -273,7 +278,6 @@ function CampaignForm() {
           type="submit"
           className="submit-btn"
           aria-label="Create Campaign"
-          // disabled={!isVerified}
           data-tooltip-content={
             isVerified ? "" : "Verify your kyc to create your first Campaign!"
           }

@@ -1,72 +1,86 @@
-import type { ICampaignRequest, ICampaignResponse } from "@/interfaces/campaign.interface";
-import type { AxiosResponse} from "axios";
+import type {
+  ICampaignRequest,
+  ICampaignResponse,
+} from "@/interfaces/campaign.interface";
+import type { AxiosResponse } from "axios";
 import { apiEndpoints } from "@/constant/api.constant";
 import axiosInstance from "./axios.instance";
 import type { ECampaignStatus } from "@/enums";
 import type { GetResponse } from "@/types";
 
+export const createCampign = async (
+  payload: ICampaignRequest
+): Promise<AxiosResponse<ICampaignResponse>> => {
+  // console.log(payload);
+ try {
+   const formData = new FormData();
 
+   // 1. Append regular fields as individual parts (not nested)
+   formData.append("title", payload.title);
+   formData.append("description", payload.description);
+   formData.append("goalAmount", payload.goalAmount.toString());
+   if (payload.userId) formData.append("userId", payload.userId.toString());
 
-export const createCampign = async(
-    payload:ICampaignRequest
-):Promise<AxiosResponse<ICampaignResponse>> =>{
-    console.log(payload);
-   try {
-     const formData = new FormData();
+   // 2. Append tags as multiple parts with same name
+   payload.tags?.forEach((tag) => formData.append("tags", tag));
 
-     //append regular field
-     formData.append("title", payload.title);
-     formData.append("description", payload.description);
-     formData.append("goalAmount", payload.goalAmount.toString());
+   // 3. Append campaign image (must be File object)
+   if (payload.campaignImage instanceof File) {
      formData.append("campaignImage", payload.campaignImage);
-     if(payload.userId) formData.append("userId", payload.userId.toString())
-
-    // Append tags array (as repeated fields)
-    payload.tags?.forEach(tag => formData.append('tags', tag));
-    
-
-    // Append files
-    payload.supportingImages?.forEach(file => formData.append('supportingImages', file));
-
-    console.log(formData);
-    
-    const response = await axiosInstance.post(
-        apiEndpoints.createCampaignUrl,
-        formData,
-      );
-      console.log(response);
-  
-      return response;
-
-   } catch (error) {
-    return Promise.reject(error)
+   } else {
+     console.error(
+       "campaignImage is not a File object:",
+       payload.campaignImage
+     );
+     throw new Error("campaignImage must be a File object");
    }
-}
 
-export const getAllCampaignByStatus = async(
-    status:ECampaignStatus
-):Promise<AxiosResponse<GetResponse<ICampaignResponse>>> =>{
-    try { 
+   // 4. Append supporting images (if any)
+   if (payload.supportingImages) {
+     payload.supportingImages.forEach((file, index) => {
+       if (file instanceof File) {
+         formData.append("supportingImages", file);
+       } else {
+         console.warn(`Skipping invalid file at index ${index}`);
+       }
+     });
+   }
+
+   const response = await axiosInstance.post(apiEndpoints.createCampaignUrl, formData, {
+     headers: {
+       "Content-Type": "multipart/form-data",
+     },
+   });
+
+   return response.data;
+ } catch (error) {
+   console.error("Error creating campaign:", error);
+   throw error;
+ }
+};
+
+export const getAllCampaignByStatus = async (
+  status: ECampaignStatus
+): Promise<AxiosResponse<GetResponse<ICampaignResponse>>> => {
+  try {
     const response = await axiosInstance.get(
-        apiEndpoints.getCampaignByStatusUrl.concat(`?status=${status}`)
-      );
-  
-      return response;
-    } catch (error) {
-        return Promise.reject(error)
-    }
-}
+      apiEndpoints.getCampaignByStatusUrl.concat(`?status=${status}`)
+    );
 
+    return response;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
 
-export const getAllCampaignByUser = async():Promise<AxiosResponse<GetResponse<ICampaignResponse>>> =>{
-    try { 
-    const response = await axiosInstance.get(
-        apiEndpoints.getUserCampaignsUrl
-      );
-  
-      return response;
-    } catch (error) {
-        return Promise.reject(error)
-    }
-}
-  
+export const getAllCampaignByUser = async (): Promise<
+  AxiosResponse<GetResponse<ICampaignResponse>>
+> => {
+  try {
+    const response = await axiosInstance.get(apiEndpoints.getUserCampaignsUrl);
+
+    return response;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};

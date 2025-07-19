@@ -8,6 +8,7 @@ let token;
 if (saved) {
   token = JSON.parse(saved).token;
 }
+console.log(token);
 
 const stompClient = new Client({
   webSocketFactory: () => new SockJS(socketUrl),

@@ -4,6 +4,7 @@ import "./DashboardCampaign.css";
 function DashboardCampign() {
   const campaigns = [
     {
+      id: 1,
       title: "Clean Water for All",
       description:
         "Providing clean drinking water to rural communities in need.",
@@ -14,6 +15,7 @@ function DashboardCampign() {
         "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80",
     },
     {
+      id: 2,
       title: "Education for Every Child",
       description:
         "Funding school supplies and scholarships for underprivileged kids.",
@@ -24,6 +26,7 @@ function DashboardCampign() {
         "https://images.unsplash.com/photo-1529070538774-1843cb3265df?auto=format&fit=crop&w=600&q=80",
     },
     {
+      id: 3,
       title: "Medical Aid in Remote Areas",
       description: "Supplying medical equipment to underserved regions.",
       creator: "HealthReach Org",
@@ -33,6 +36,7 @@ function DashboardCampign() {
         "https://images.unsplash.com/photo-1533553502768-f7ad9f9ccfe8?auto=format&fit=crop&w=600&q=80",
     },
     {
+      id: 4,
       title: "Reforestation Project",
       description: "Planting trees to combat deforestation and climate change.",
       creator: "GreenFuture Initiative",
@@ -59,6 +63,7 @@ function DashboardCampign() {
           return (
             <CampaignCard
               key={value.title}
+              campaignId={value.id}
               title={value.title}
               description={value.description}
               creator={value.creator}
