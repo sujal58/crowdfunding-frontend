@@ -6,6 +6,7 @@ import type { AxiosResponse } from "axios";
 import type { GetResponse } from "@/types";
 import { getAllCampaignByUser } from "@/apis/campaign.api";
 import axios from "axios";
+import { ECampaignStatus } from "@/enums";
 
 function CampaignTable() {
   const [campaigns, setCampaigns] = useState<ICampaignResponse[]>();
@@ -65,7 +66,18 @@ function CampaignTable() {
                 <td>{campaign.title}</td>
                 <td>{campaign.goalAmount}</td>
                 <td>{campaign.currentAmount}</td>
-                <td>{campaign.status}</td>
+                <td
+                  style={{
+                    color:
+                      campaign.status === ECampaignStatus.ACTIVE
+                        ? "#22c55e"
+                        : campaign.status === "Pending"
+                        ? "#f59e0b"
+                        : "#ef4444",
+                  }}
+                >
+                  {campaign.status}
+                </td>
                 <td>
                   <button
                     className="table-btn"

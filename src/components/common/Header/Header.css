@@ -7,6 +7,7 @@
   align-items: center;
   position: sticky;
   top: 0;
+  height: 8vh;
 }
 
 .top-header {
@@ -27,14 +28,27 @@
   color: #2563eb;
   cursor: pointer;
 }
-.header label {
+
+.header-logo img {
+  height: 50px;
+  width: 170px;
+}
+
+/* .header div {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   font-weight: 700;
   font-size: 1.5rem;
   font-family: serif;
-}
+} */
+/* 
+.header div.user-name-status p{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+} */
 
 .auth-btn {
   display: flex;
@@ -63,5 +77,62 @@
   &:hover {
     background-color: #1e40af;
     box-shadow: 0 2px 6px rgba(30, 64, 175, 0.5);
+  }
+}
+
+@media (max-width: 900px){
+  
+  .btn-register {
+      background-color: #2563eb;
+      color: white;
+      box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
+      font-size: 0.75rem;
+  }
+
+    .auth-btn button {
+      padding: 0.5rem 1.5rem;
+      margin-left: 1rem;
+    }
+
+  .header-logo img{
+    height: 40px;
+    width: 140px;
+  }
+
+  .header div.user-name-status{
+    font-size: 1rem;
+    gap:0px;
+  }
+}
+
+@media (max-width: 640px) {
+  .btn-register {
+    background-color: #2563eb;
+    color: white;
+    box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
+    font-size: 0.75rem;
+  }
+
+    .auth-btn button {
+      padding: 0.5rem 1rem;
+      margin-left: rem;
+    }
+
+  .auth-btn button {
+    padding: 0.5rem 1rem;
+    margin-left: 1rem;
+  }
+
+  .header-logo img {
+    height: 30px;
+    width: 100px;
+  }
+
+  .btn-login{
+    font-size: 0.9rem;
+  }
+
+  .header div.user-name-status {
+    font-size: 0.8rem;
   }
 }

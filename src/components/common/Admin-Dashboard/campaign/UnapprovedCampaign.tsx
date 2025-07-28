@@ -1,25 +1,26 @@
 import React, { useEffect, useState } from "react";
 import CampaignTable from "../table/CampaignTable";
-import type { GetResponse } from "@/types";
+import type { GetResponse, UserOutletContextType } from "@/types";
 import type { ICampaignResponse } from "@/interfaces/campaign.interface";
 import type { AxiosResponse } from "axios";
 import { getAllCampaignByStatus } from "@/apis/campaign.api";
 import { ECampaignStatus } from "@/enums";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { useOutletContext } from "react-router-dom";
 
 const UnapprovedCampaigns: React.FC = () => {
   const [campaign, setCampaign] = useState<ICampaignResponse[]>([]);
+  const { doRefresh, refreshFlag } = useOutletContext<UserOutletContextType>();
 
   useEffect(() => {
     const fetchCampaign = async () => {
       try {
         const response: AxiosResponse<GetResponse<ICampaignResponse>> =
           await getAllCampaignByStatus(ECampaignStatus.CANCELLED);
+
         if (response.status == 200) {
           setCampaign(response.data.data);
-          response.data.data.length == 0 &&
-            toast.warn("No rejected campaign exist!");
         }
       } catch (err: unknown) {
         if (axios.isAxiosError(err)) {
@@ -36,36 +37,13 @@ const UnapprovedCampaigns: React.FC = () => {
     };
 
     fetchCampaign();
-  }, []);
-
-  const getActions = (campaign: any) => (
-    <>
-      <button
-        className="table-btn approve-btn"
-        onClick={() => handleAction(campaign.id, "Approve")}
-      >
-        Approve
-      </button>
-
-      <button
-        className="table-btn flag-btn"
-        onClick={() => handleAction(campaign.id, "Details")}
-      >
-        View details
-      </button>
-    </>
-  );
-
-  const handleAction = (id: number, action: string, reason?: string | null) => {
-    console.log(`Action ${action} on unapproved item ${id}, reason: ${reason}`);
-    alert(`${action} successful!`);
-  };
+  }, [refreshFlag]);
 
   return (
     <CampaignTable
-      type={ECampaignStatus.CANCELLED}
+      type={"Unapproved"}
       campaigns={campaign}
-      getActions={getActions}
+      onRefresh={doRefresh}
     />
   );
 };

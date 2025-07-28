@@ -5,6 +5,7 @@ import AuthHeader from "../../common/Header/AuthHeader";
 import AdminSidebar from "../../common/sidebar/AdminSidebar";
 import "./DashboardPage.css";
 import Modal from "@/components/common/Admin-Dashboard/Modal";
+import useNotification from "@/hooks/useNotification";
 
 const AdminDashboardPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState("tabMetrics");
@@ -16,6 +17,8 @@ const AdminDashboardPage: React.FC = () => {
 
   const openModal = (type: string, data?: any) => setModalData({ type, data });
   const closeModal = () => setModalData(null);
+
+  useNotification("");
 
   const tabs = [
     { id: "tabMetrics", label: "Metrics", path: "/" },
@@ -30,14 +33,19 @@ const AdminDashboardPage: React.FC = () => {
           path: "/",
         },
         {
-          id: "tabUnverifiedUsers",
-          label: "Unverified Users",
-          path: "/unverified",
+          id: "tabPendingUsers",
+          label: "Pending Users",
+          path: "/pending",
         },
         {
           id: "tabRejectedUsers",
           label: "Rejected Users",
           path: "/rejected",
+        },
+        {
+          id: "tabFlaggedUsers",
+          label: "Flagged Users",
+          path: "/flagged",
         },
       ],
     },

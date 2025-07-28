@@ -20,9 +20,6 @@ const DonationCard: React.FC<DonationCardProps> = ({
   campaignName,
   isOpen,
   onClose,
-  // onDonate,
-  // setClientSecret,
-  // showPaymentModal,
 }) => {
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
   const [customAmount, setCustomAmount] = useState<number | "">("");
@@ -30,8 +27,6 @@ const DonationCard: React.FC<DonationCardProps> = ({
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
-
-  // const { username } = useAuth();
 
   useEffect(() => {
     if (!isOpen) {
@@ -67,6 +62,7 @@ const DonationCard: React.FC<DonationCardProps> = ({
       const payload: IPaymentIntentRequest = {
         email: "pandeysujal258@gmail.com",
         campaignId: campaignId,
+        campaignName: campaignName,
         amount: amountToDonate,
       };
 
@@ -91,8 +87,6 @@ const DonationCard: React.FC<DonationCardProps> = ({
   };
 
   const handleAmountSubmit = (clientSecret: string) => {
-    // setClientSecret(clientSecret);
-    // showPaymentModal();
     onClose();
     navigate("/user-dashboard/payment", {
       state: {

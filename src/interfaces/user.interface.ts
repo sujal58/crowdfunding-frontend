@@ -2,15 +2,13 @@ import type { EKycStatus } from "@/enums";
 import type { Role } from "@/types";
 
 export interface IUserResponse {
-    userId: string;
-    email: string;
-    name: string;
-    username: string;
-    country: string;
-    city: string;
-    kycStatus: EKycStatus; 
-    roles: Role[]; 
-    createdAt: string; 
-  }
-
-  
+  userId: number;
+  email: string;
+  name: string;
+  username: string;
+  country: string;
+  city: string;
+  kycStatus: EKycStatus;
+  roles: Role[];
+  createdAt: string;
+}

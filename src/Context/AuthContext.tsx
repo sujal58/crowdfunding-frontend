@@ -1,3 +1,4 @@
+import { getKycStatusByUserId } from "@/apis/user.api";
 import { createContext, useContext, useState } from "react";
 
 type AuthContextType = {
@@ -8,6 +9,7 @@ type AuthContextType = {
   status: string;
   login: (userData: userDataType) => void;
   logout: () => void;
+  refreshStatus: () => Promise<void>;
 };
 
 type userDataType = {
@@ -34,6 +36,7 @@ export const authContext = createContext<AuthContextType>({
   status: "",
   login: () => {},
   logout: () => {},
+  refreshStatus: async () => Promise.resolve(),
 });
 
 export function AuthProvider({ children }: any) {
@@ -50,7 +53,7 @@ export function AuthProvider({ children }: any) {
           token: "",
           username: "",
           roles: [],
-          status: "", // Include all required keys from AuthContextType
+          status: "",
         };
       }
     } catch (error) {
@@ -76,8 +79,24 @@ export function AuthProvider({ children }: any) {
     localStorage.removeItem("userdata");
   };
 
+  const refreshStatus = async () => {
+    try {
+      const res = await getKycStatusByUserId(auth.userId);
+      if (res.status == 200) {
+        const data = res.data.data;
+        console.log(data);
+        setAuth((prev) => ({
+          ...prev,
+          status: data.toString(),
+        }));
+      }
+    } catch (error) {
+      console.error("Failed to refresh user status", error);
+    }
+  };
+
   return (
-    <authContext.Provider value={{ ...auth, login, logout }}>
+    <authContext.Provider value={{ ...auth, login, logout, refreshStatus }}>
       {children}
     </authContext.Provider>
   );

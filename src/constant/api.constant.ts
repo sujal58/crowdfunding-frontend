@@ -10,7 +10,8 @@ export const apiEndpoints = {
   createCampaignUrl: `${baseApi}/campaigns`,
   getCampaignByIdUrl: `${baseApi}/campaigns/id/`, // append {id}
   getAllCampaignsUrl: `${baseApi}/campaigns`,
-  getCampaignByStatusUrl: `${baseApi}/campaigns`, // append ?status=pending
+  updateCampaignStatus: `${baseApi}/campaigns/status`, //append ?campaignId= &status=
+  getCampaignByStatusUrl: `${baseApi}/campaigns/campaign`, // append ?status=pending
   getUserCampaignsUrl: `${baseApi}/campaigns/total`,
   deleteCampaignUrl: `${baseApi}/campaigns/delete/`, // append {id}
 
@@ -70,7 +71,12 @@ export const apiEndpoints = {
   getKycStatusByUsernameUrl: `${baseApi}/users/kyc/`, // append {username}
   deleteUserUrl: `${baseApi}/users/`, // append {id}
   resetPasswordUrl: `${baseApi}/users/reset-password`,
+  getKycStatusByUserId: `${baseApi}/users/kyc-status`,
 
   //payment
   initiatePayment: `${baseApi}/payment/create-payment-intent`,
+
+  //dashboard
+  getuserDashboardDetails: `${baseApi}/dashboard/user`,
+  getAdminDashboardDetails: `${baseApi}/dashboard/admin`,
 };

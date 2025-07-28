@@ -3,7 +3,6 @@ import "./Header.css";
 import useAuth from "@/Context/AuthContext";
 import { MdVerifiedUser } from "react-icons/md";
 import { useEffect, useState } from "react";
-import { Tooltip as ReactTooltip } from "react-tooltip";
 
 function AuthHeader() {
   let navigate = useNavigate();
@@ -23,41 +22,18 @@ function AuthHeader() {
 
   return (
     <>
-      {/* <h1 className="top-header">
-        {navigateLink == "/user-dashboard"
-          ? "USER DASHBOARD"
-          : "ADMIN DASHBOARD"}
-      </h1> */}
       <header className="header">
         <h1 className="header-logo" onClick={() => navigate(navigateLink)}>
-          {/* fundSaathi */}
-          <img
-            src="/longlogo.png"
-            alt="Logo of fundSaathi"
-            height={200}
-            width={200}
-          />
+          <img src="/longlogo.png" alt="Logo of fundSaathi" />
         </h1>
-        <label>
-          Welcome, {username} {status === "VERIFIED" && <MdVerifiedUser />}
-        </label>
+
         <nav className="auth-btn">
-          {navigateLink === "/user-dashboard" && (
-            <button
-              className="btn-login"
-              disabled={!isVerified}
-              data-tooltip-content={
-                isVerified
-                  ? ""
-                  : "Verify your kyc to create your first Campaign!"
-              }
-              data-tooltip-id="myTooltip"
-              onClick={() => navigate(`${navigateLink}/create-campaign`)}
-            >
-              Create Campaign
-            </button>
-          )}
-          <ReactTooltip id="myTooltip" />
+          <div className="user-name-status flex items-center gap-2 text-sm text-muted-foreground">
+            <span>Welcome, {username}</span>
+            {status === "VERIFIED" && (
+              <MdVerifiedUser className="h-4 w-4 text-primary" />
+            )}
+          </div>
           <button className="btn-register" onClick={() => logout()}>
             Log Out
           </button>

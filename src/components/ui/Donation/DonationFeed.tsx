@@ -45,6 +45,8 @@ function DonationFeed() {
     { donor: "Sara", amount: 10, time: "1 hour ago" },
   ];
 
+  console.log(donations);
+
   return (
     <>
       {!userLogged ? (
@@ -74,7 +76,7 @@ function DonationFeed() {
           </h1>
           {donations.map((d, index) => (
             <div key={index} className="donation-feed-item">
-              you have donated ${d.amount} to {d.campaign} on{" "}
+              you have donated ${d.amount} to {d.campaignName} on{" "}
               {d.createdAt.split("T")[0]}
             </div>
           ))}

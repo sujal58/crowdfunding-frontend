@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import CampaignTable from "../table/CampaignTable";
-import type { GetResponse } from "@/types";
+import type { GetResponse, UserOutletContextType } from "@/types";
 import type { AxiosResponse } from "axios";
 import type { ICampaignResponse } from "@/interfaces/campaign.interface";
 import { getAllCampaignByStatus } from "@/apis/campaign.api";
 import { ECampaignStatus } from "@/enums";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { useOutletContext } from "react-router-dom";
 
 const SuspiciousCampaigns: React.FC = () => {
   const [campaign, setCampaign] = useState<ICampaignResponse[]>([]);
+  const { doRefresh, refreshFlag } = useOutletContext<UserOutletContextType>();
 
   useEffect(() => {
     const fetchCampaign = async () => {
@@ -18,8 +20,6 @@ const SuspiciousCampaigns: React.FC = () => {
           await getAllCampaignByStatus(ECampaignStatus.SUSPICIOUS);
         if (response.status == 200) {
           setCampaign(response.data.data);
-          response.data.data.length == 0 &&
-            toast.warn("No Suspicious campaign exist!");
         }
       } catch (err: unknown) {
         if (axios.isAxiosError(err)) {
@@ -36,41 +36,13 @@ const SuspiciousCampaigns: React.FC = () => {
     };
 
     fetchCampaign();
-  }, []);
-
-  const getActions = (campaign: any) => (
-    <>
-      <button
-        className="table-btn approve-btn"
-        onClick={() => handleAction(campaign.id, "Approve")}
-      >
-        Approve
-      </button>
-      <button
-        className="table-btn reject-btn"
-        onClick={() => handleAction(campaign.id, "Reject", prompt("Reason?"))}
-      >
-        Reject
-      </button>
-      <button
-        className="table-btn clear-btn"
-        onClick={() => handleAction(campaign.id, "Clear")}
-      >
-        Clear Flag
-      </button>
-    </>
-  );
-
-  const handleAction = (id: number, action: string, reason?: string | null) => {
-    console.log(`Action ${action} on suspicious item ${id}, reason: ${reason}`);
-    alert(`${action} successful!`);
-  };
+  }, [refreshFlag]);
 
   return (
     <CampaignTable
-      type={ECampaignStatus.SUSPICIOUS}
+      type={"Suspicious"}
       campaigns={campaign}
-      getActions={getActions}
+      onRefresh={doRefresh}
     />
   );
 };
