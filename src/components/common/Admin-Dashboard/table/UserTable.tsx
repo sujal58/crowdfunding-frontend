@@ -6,11 +6,12 @@ import axios from "axios";
 import { changeKycStatusByAdmin } from "@/apis/kyc.api";
 
 interface UserTableProps {
-  type: "verifiedUsers" | "unverifiedUsers" | "rejectedUser";
+  type: "verifiedUsers" | "pendingUsers" | "rejectedUsers" | "flaggedUsers";
   users: IUserResponse[];
+  onRefresh: () => void;
 }
 
-const UserTable: React.FC<UserTableProps> = ({ type, users }) => {
+const UserTable: React.FC<UserTableProps> = ({ type, users, onRefresh }) => {
   const getActions = (user: IUserResponse) => (
     <div className="flex gap-2">
       <button
@@ -19,7 +20,7 @@ const UserTable: React.FC<UserTableProps> = ({ type, users }) => {
       >
         Details
       </button>
-      {type === "unverifiedUsers" && (
+      {type === "pendingUsers" && (
         <>
           <button
             className="table-btn verify-btn bg-green-500 text-white px-2 py-1 rounded"
@@ -29,7 +30,7 @@ const UserTable: React.FC<UserTableProps> = ({ type, users }) => {
           </button>
           <button
             className="table-btn reject-btn bg-red-500 text-white px-2 py-1 rounded"
-            onClick={() => handleAction(user, "Reject", "KYC incomplete")}
+            onClick={() => handleAction(user, "Reject")}
           >
             Reject
           </button>
@@ -38,61 +39,65 @@ const UserTable: React.FC<UserTableProps> = ({ type, users }) => {
       {type === "verifiedUsers" && (
         <button
           className="table-btn flag-btn bg-yellow-500 text-white px-2 py-1 rounded"
-          onClick={() => handleAction(user, "Flag", "Suspicious activity")}
+          onClick={() => handleAction(user, "Flag")}
         >
           Flag
         </button>
       )}
-      {type === "rejectedUser" && (
+      {type === "rejectedUsers" && (
         <button
           className="table-btn flag-btn bg-red-500 text-white px-2 py-1 rounded"
-          onClick={() =>
-            handleAction(user, "Delete", "Rejected User cleaning!")
-          }
+          onClick={() => handleAction(user, "Delete")}
         >
           Delete
         </button>
       )}
+      {type === "flaggedUsers" && (
+        <>
+          <button
+            className="table-btn flag-btn bg-red-500 text-white px-2 py-1 rounded"
+            onClick={() => handleAction(user, "Delete")}
+          >
+            Delete
+          </button>
+          <button
+            className="table-btn flag-btn bg-green-500 text-white px-2 py-1 rounded"
+            onClick={() => handleAction(user, "unFlag")}
+          >
+            Remove flag
+          </button>
+        </>
+      )}
     </div>
   );
 
-  const handleAction = async (
-    data: IUserResponse,
-    action: string,
-    reason?: string | null
-  ) => {
-    console.log(
-      `Action ${action} on ${type} user ${data.userId}, reason: ${reason}`
-    );
+  const handleAction = async (data: IUserResponse, action: string) => {
+    if (action === "View") {
+      // openModal("kyc", data);
+    } else if (action === "Verify") {
+      changeStatusOfUser(data.userId, EKycStatus.VERIFIED);
+    } else if (action === "Reject") {
+      changeStatusOfUser(data.userId, EKycStatus.REJECTED);
+    } else if (action === "Flag") {
+      changeStatusOfUser(data.userId, EKycStatus.FlAGGED);
+    } else if (action === "unFlag") {
+      changeStatusOfUser(data.userId, EKycStatus.PENDING);
+    }
+  };
+
+  const changeStatusOfUser = async (userId: number, status: EKycStatus) => {
     try {
-      if (action === "View") {
-        // openModal("kyc", data);
-      } else if (action === "Verify") {
-        console.log("Verify started");
-        const response = await changeKycStatusByAdmin(
-          data.userId,
-          EKycStatus.VERIFIED
-        );
-        if (response.status === 200) {
-          toast.success(`User ${data.userId} verified successfully`, {
-            style: { background: "#f0fdf4", color: "#22c55e" },
-          });
-        }
-      } else if (action === "Reject") {
-        toast.error(`User ${data.userId} rejected: ${reason}`, {
-          style: { background: "#fef2f2", color: "#ef4444" },
+      const response = await changeKycStatusByAdmin(userId, status);
+      if (response.status === 200) {
+        toast.success(`User ${userId} ${status.toLowerCase()} successfully`, {
+          style: { background: "#f0fdf4", color: "#22c55e" },
         });
-      } else if (action === "Flag") {
-        // await flagUser(data.userId, reason);
-        toast.warn(`User ${data.userId} flagged: ${reason}`, {
-          style: { background: "#fefce8", color: "#f59e0b" },
-        });
+        onRefresh && onRefresh();
       }
     } catch (err: unknown) {
-      console.log(err);
       if (axios.isAxiosError(err)) {
         toast.error(
-          err.response?.data.data || `Failed to ${action.toLowerCase()} user`,
+          err.response?.data.data || `Failed to ${status.toLowerCase()} user`,
           {
             style: { background: "#fef2f2", color: "#ef4444" },
           }
@@ -104,10 +109,18 @@ const UserTable: React.FC<UserTableProps> = ({ type, users }) => {
       }
     }
   };
+
+  const userTypeLabels: Record<string, string> = {
+    verifiedUsers: "Verified Users",
+    pendingUsers: "Pending Users",
+    flaggedUsers: "Flagged Users",
+    rejectedUsers: "Rejected Users",
+  };
+
   return (
     <>
       <h2 className="text-3xl text-center font-extrabold mb-6 text-[#2563eb]">
-        {type === "verifiedUsers" ? "Verified Users" : "Unverified Users"}
+        {userTypeLabels[type] || "unknown header"}
       </h2>
       <table className="w-full border-collapse mb-6 text-sm">
         <thead>
@@ -136,7 +149,7 @@ const UserTable: React.FC<UserTableProps> = ({ type, users }) => {
               <td className="border border-gray-300 p-3">{user.country}</td>
 
               <td
-                className="border border-gray-300 p-3"
+                className="border border-gray-300 p-3 font-bold"
                 style={{
                   color:
                     user.kycStatus === EKycStatus.VERIFIED
@@ -145,6 +158,8 @@ const UserTable: React.FC<UserTableProps> = ({ type, users }) => {
                       ? "#f59e0b" // yellow
                       : user.kycStatus === EKycStatus.REJECTED
                       ? "#dc2626" // red (for rejected)
+                      : user.kycStatus === EKycStatus.FlAGGED
+                      ? "#c2410c"
                       : "#ef4444", // fallback/default (also red or error color)
                 }}
               >

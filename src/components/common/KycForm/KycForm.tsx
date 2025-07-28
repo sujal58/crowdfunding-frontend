@@ -11,7 +11,7 @@ import type {
 } from "@/interfaces/kyc.interface";
 import type { AxiosResponse } from "axios";
 import { getKycByUserId, submitKyc } from "@/apis/kyc.api";
-import type { GetResponse, GetSignleResponse } from "@/types";
+import type { GetResponse, GetSingleResponse } from "@/types";
 import axios from "axios";
 import useAuth from "@/Context/AuthContext";
 import CameraButton from "@/components/ui/Button/CameraButton";
@@ -20,6 +20,8 @@ function KYCForm() {
   const [kycSubmitted, setKycSubmitted] = useState(false);
   const [kycEdit, setKycEdit] = useState(false);
   const [kycData, setKycData] = useState<IKycResponse | null>(null);
+  const [processing, setIsProcessing] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -40,7 +42,7 @@ function KYCForm() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
 
-  const { userId, status } = useAuth();
+  const { userId } = useAuth();
 
   const startCamera = useCallback(async () => {
     try {
@@ -112,7 +114,7 @@ function KYCForm() {
 
     try {
       const kycPayload: IKycRequest = { ...data, ...files };
-
+      setIsProcessing(true);
       const response: AxiosResponse<GetResponse<IKycResponse>> =
         await submitKyc(kycPayload);
 
@@ -124,7 +126,7 @@ function KYCForm() {
           },
         });
 
-        let fetchResponse: AxiosResponse<GetSignleResponse<IKycResponse>> =
+        let fetchResponse: AxiosResponse<GetSingleResponse<IKycResponse>> =
           await getKycByUserId(userId);
         if (fetchResponse.status === 200 && fetchResponse.data.data) {
           setKycData(fetchResponse.data.data);
@@ -147,6 +149,7 @@ function KYCForm() {
         });
       }
     }
+    setIsProcessing(false);
   };
 
   const handleEditKyc = () => {
@@ -156,7 +159,7 @@ function KYCForm() {
 
   useEffect(() => {
     async function fetchUserKyc() {
-      let response: AxiosResponse<GetSignleResponse<IKycResponse>> =
+      let response: AxiosResponse<GetSingleResponse<IKycResponse>> =
         await getKycByUserId(userId);
       console.log(response.data.data);
       if (response.status == 200 && response.data.data) {
@@ -167,6 +170,12 @@ function KYCForm() {
     if (!kycEdit) fetchUserKyc();
     else reset(kycData ?? undefined);
   }, [kycSubmitted]);
+
+  useEffect(() => {
+    if (processing) {
+      toast.info("Kyc is processing! Please wait", { autoClose: 5000 });
+    }
+  }, [processing]);
 
   return (
     <div className="settings-section kyc-section">
@@ -197,17 +206,25 @@ function KYCForm() {
             </p>
             <p>
               <strong>Verification Status:</strong>{" "}
-              <span style={{ color: "#f59e0b" }}>{status}</span>
+              <span
+                style={{
+                  color: `${
+                    kycData?.status === "VERIFIED" ? "green" : "#f59e0b"
+                  }`,
+                  fontWeight: "700",
+                }}
+              >
+                {kycData?.status}
+              </span>
             </p>
             <p>
-              <strong>DeepFace Confidence:</strong> 78%
+              <strong>DeepFace Confidence:</strong>{" "}
+              {((0.68 - kycData?.faceMatchScore!) / 0.68) * 100}
             </p>
             <p>
-              <strong>OCR Front Confidence:</strong> 87%
+              <strong>OCR Score:</strong> {kycData?.faceMatchScore}
             </p>
-            <p>
-              <strong>OCR Back Confidence:</strong> 85%
-            </p>
+
             <p>
               <strong>Reviewed by:</strong>{" "}
               <span style={{ color: "#f59e0b" }}>{kycData?.reviewedBy}</span>
@@ -291,7 +308,7 @@ function KYCForm() {
                 {...register("documentNumber", {
                   required: "Document number is required",
                 })}
-                placeholder="1111-a1a1-22bb"
+                placeholder="xx-xx-xx-xxxxx"
                 aria-required="true"
               />
               {errors.documentNumber && (
@@ -452,9 +469,11 @@ function KYCForm() {
           <button
             className="submit-kyc"
             onClick={handleSubmit(submitForm)}
-            disabled={!files.image || !files.frontDoc || !files.backDoc}
+            disabled={
+              !files.image || !files.frontDoc || !files.backDoc || processing
+            }
           >
-            Submit KYC
+            {processing ? "verifying kyc" : "Submit KYC"}
           </button>
         </>
       )}

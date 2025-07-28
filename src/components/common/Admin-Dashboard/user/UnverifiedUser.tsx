@@ -5,17 +5,21 @@ import { toast } from "react-toastify";
 import axios, { type AxiosResponse } from "axios";
 import UserTable from "../table/UserTable";
 import { EKycStatus } from "@/enums";
-import type { GetResponse } from "@/types";
+import type { GetResponse, UserOutletContextType } from "@/types";
+import { useOutletContext } from "react-router-dom";
 
 const UnverifiedUsers: React.FC = () => {
   const [users, setUsers] = useState<IUserResponse[]>([]);
+
+  const { doRefresh, refreshFlag } =
+    useOutletContext<UserOutletContextType>();
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const response: AxiosResponse<GetResponse<IUserResponse>> =
           await getAllUserByKycStatus(EKycStatus.PENDING);
-        console.log(response);
+
         if (response.status == 200) {
           setUsers(response.data.data);
         }
@@ -33,9 +37,11 @@ const UnverifiedUsers: React.FC = () => {
     };
 
     fetchUsers();
-  }, []);
+  }, [refreshFlag]);
 
-  return <UserTable type="unverifiedUsers" users={users} />;
+  return (
+    <UserTable type="pendingUsers" users={users} onRefresh={doRefresh} />
+  );
 };
 
 export default UnverifiedUsers;

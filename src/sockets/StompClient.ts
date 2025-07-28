@@ -16,7 +16,7 @@ const stompClient = new Client({
   connectHeaders: {
     Authorization: `Bearer ${token}`,
   },
-  debug: (str) => console.log("[STOMP]", str),
+  // debug: (str) => console.log("[STOMP]", str),
   onConnect: () => console.log("STOMP connected"),
   onStompError: (frame) => console.error("STOMP error", frame),
 });

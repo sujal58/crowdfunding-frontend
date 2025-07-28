@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { toast } from "react-toastify";
 import stompClient from "../sockets/StompClient";
 
-const useNotification = (userId: string) => {
+const useNotification = (username: string) => {
   useEffect(() => {
     const onConnect = () => {
       console.log("STOMP connected");
@@ -25,7 +25,7 @@ const useNotification = (userId: string) => {
       );
 
       const privateSub = stompClient.subscribe(
-        `/user/queue/notifications`,
+        `/user/${username}/queue/notifications`,
         (message) => {
           const data = JSON.parse(message.body);
           toast.info(`🧍 ${data.message}`, {
@@ -62,7 +62,7 @@ const useNotification = (userId: string) => {
         stompClient.deactivate();
       }
     };
-  }, [userId]);
+  }, [username]);
 };
 
 export default useNotification;

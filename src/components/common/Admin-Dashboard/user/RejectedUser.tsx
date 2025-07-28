@@ -9,10 +9,14 @@ import { toast } from "react-toastify";
 import UserTable from "../table/UserTable";
 import { getAllUserByKycStatus } from "@/apis/user.api";
 import { EKycStatus } from "@/enums";
-import type { GetResponse } from "@/types";
+import type { GetResponse, UserOutletContextType } from "@/types";
+import { useOutletContext } from "react-router-dom";
 
 const RejectedUser: React.FC = () => {
   const [users, setUsers] = useState<IUserResponse[]>([]);
+
+  const { doRefresh, refreshFlag } =
+    useOutletContext<UserOutletContextType>();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -21,9 +25,6 @@ const RejectedUser: React.FC = () => {
           await getAllUserByKycStatus(EKycStatus.REJECTED);
         if (response.status == 200) {
           setUsers(response.data.data);
-          toast.success("Rejected user fetched successfully!");
-          response.data.data.length == 0 &&
-            toast.warn("No Rejected user exist!");
         }
       } catch (err: unknown) {
         if (axios.isAxiosError(err)) {
@@ -39,9 +40,11 @@ const RejectedUser: React.FC = () => {
     };
 
     fetchUsers();
-  }, []);
+  }, [refreshFlag]);
 
-  return <UserTable type="rejectedUser" users={users} />;
+  return (
+    <UserTable type="rejectedUsers" users={users} onRefresh={doRefresh} />
+  );
 };
 
 export default RejectedUser;

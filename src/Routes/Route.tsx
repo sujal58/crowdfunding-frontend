@@ -35,6 +35,8 @@ import PendingCampaign from "@/components/common/Admin-Dashboard/campaign/Pendin
 import ForgotPassword from "@/components/Pages/forgotPassword/ForgotPassword";
 import PaymentPage from "@/components/Pages/PaymentPage";
 import PaymentSuccess from "@/components/Pages/PaymentSuccess";
+import Index from "@/components/common/User-dashboard/Index";
+import FlaggedUser from "@/components/common/Admin-Dashboard/user/FlaggedUser";
 
 export const router = createBrowserRouter([
   {
@@ -67,7 +69,8 @@ export const router = createBrowserRouter([
             path: "/user-dashboard",
             Component: DashboardPage,
             children: [
-              { index: true, Component: CampaignTable },
+              { index: true, Component: Index },
+              { path: "campaign", Component: CampaignTable },
               { path: "donations", Component: DonationFeed },
               { path: "campaigns", Component: DashboardCampign },
               {
@@ -101,8 +104,9 @@ export const router = createBrowserRouter([
                 Component: UserIndex,
                 children: [
                   { index: true, Component: VerifiedUsers },
-                  { path: "unverified", Component: UnverifiedUsers },
+                  { path: "pending", Component: UnverifiedUsers },
                   { path: "rejected", Component: RejectedUser },
+                  { path: "flagged", Component: FlaggedUser },
                 ],
               },
               {

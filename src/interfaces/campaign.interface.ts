@@ -8,16 +8,16 @@ export interface ICampaignRequest {
   supportingImages?: File[];
   userId?: number;
 }
-  
 
 export interface ICampaignResponse {
-    id: number;
-    title: string;
-    description: string;
-    goalAmount: number;
-    currentAmount: number;
-    status: string;
-    createdAt: string;  
-    userId: number;
-  }
-  
+  id: number;
+  title: string;
+  description: string;
+  goalAmount: number;
+  currentAmount: number;
+  status: string;
+  createdAt: string;
+  userId: number;
+  username: string;
+  campaignImage: string;
+}

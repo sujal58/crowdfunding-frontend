@@ -6,6 +6,7 @@ export interface IPaymentIntentRequest {
   email: string;
   campaignId: number;
   amount: number;
+  campaignName: string;
 }
 
 export interface IPaymentVerificationResponse {

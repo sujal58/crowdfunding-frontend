@@ -6,10 +6,10 @@ type cardProps = {
   campaignId: number;
   title: string;
   description: string;
-  creator: string;
+  creator?: string;
   goal: number;
   progress: number;
-  image: string;
+  image?: string;
   onDonate: (amount: number, customAmount?: number) => void;
 };
 
@@ -57,22 +57,9 @@ function CampaignCard({
           campaignName={title}
           isOpen={showAmountModal}
           onClose={handleCloseModal}
-          // showPaymentModal={handlePaymentModal}
           onDonate={onDonate}
-          // setClientSecret={setClientSecret}
         />
       )}
-
-      {/* {showPaymentModal && clientSecret && (
-        <div className="w-full bg-transparent h-full absolute mx-auto">
-          <Elements stripe={stripePromise} options={{ clientSecret }}>
-            <PaymentModal
-              // clientSecret={clientSecret}
-              // onClose={() => setShowPaymentModal(false)}
-            />
-          </Elements>
-        </div>
-      )} */}
     </article>
   );
 }

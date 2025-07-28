@@ -1,4 +1,6 @@
+import { delay } from "framer-motion";
 import { Navigate, Outlet } from "react-router-dom";
+import { toast } from "react-toastify";
 
 type RequireAuthProp = {
   allowedRole: string[];
@@ -19,6 +21,8 @@ const RequireAuth: React.FC<RequireAuthProp> = ({
   if (!user) return <Navigate to="/login" replace />;
 
   if (!allowedRole.includes(role.toString())) {
+    toast.warn("You are not allowed!");
+
     return <Navigate to="/" replace />;
   }
 

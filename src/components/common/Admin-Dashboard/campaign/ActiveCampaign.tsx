@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import CampaignTable from "../table/CampaignTable";
-import type { GetResponse } from "@/types";
+import type { GetResponse, UserOutletContextType } from "@/types";
 import type { ICampaignResponse } from "@/interfaces/campaign.interface";
 import type { AxiosResponse } from "axios";
 import { getAllCampaignByStatus } from "@/apis/campaign.api";
 import { ECampaignStatus } from "@/enums";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { useOutletContext } from "react-router-dom";
 
 const ActiveCampaign: React.FC = () => {
   const [campaign, setCampaign] = useState<ICampaignResponse[]>([]);
+  const { doRefresh, refreshFlag } = useOutletContext<UserOutletContextType>();
 
   useEffect(() => {
     const fetchCampaign = async () => {
@@ -18,8 +20,6 @@ const ActiveCampaign: React.FC = () => {
           await getAllCampaignByStatus(ECampaignStatus.ACTIVE);
         if (response.status == 200) {
           setCampaign(response.data.data);
-          response.data.data.length == 0 &&
-            toast.warn("No Active campaign exist!");
         }
       } catch (err: unknown) {
         if (axios.isAxiosError(err)) {
@@ -35,36 +35,10 @@ const ActiveCampaign: React.FC = () => {
     };
 
     fetchCampaign();
-  }, []);
-
-  const getActions = (campaign: any) => (
-    <>
-      <button
-        className="table-btn reject-btn"
-        onClick={() => handleAction(campaign.id, "Reject", prompt("Reason?"))}
-      >
-        Reject
-      </button>
-      <button
-        className="table-btn flag-btn"
-        onClick={() => handleAction(campaign.id, "Flag", prompt("Reason?"))}
-      >
-        Flag
-      </button>
-    </>
-  );
-
-  const handleAction = (id: number, action: string, reason?: string | null) => {
-    console.log(`Action ${action} on approved item ${id}, reason: ${reason}`);
-    alert(`${action} successful!`);
-  };
+  }, [refreshFlag]);
 
   return (
-    <CampaignTable
-      type={ECampaignStatus.ACTIVE}
-      campaigns={campaign}
-      getActions={getActions}
-    />
+    <CampaignTable type="Active" campaigns={campaign} onRefresh={doRefresh} />
   );
 };
 

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./UserSidebar.css";
 import { useNavigate } from "react-router-dom";
+import { IoMdArrowDropdown } from "react-icons/io";
 
 interface Tab {
   id: string;
@@ -96,7 +97,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
       <nav aria-label="Dashboard Navigation">
         <ul>
           {tabs.map((tab) => (
-            <li key={tab.id}>
+            <li key={tab.id} className="relative">
               {tab.submenu ? (
                 <>
                   <button
@@ -116,7 +117,8 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
                     aria-label="Dashboard Navigation"
                     aria-controls={`${tab.id}-submenu`}
                   >
-                    {tab.label}
+                    {tab.label}{" "}
+                    <IoMdArrowDropdown className="inline-block absolute right-10" />
                   </button>
                   <ul
                     id={`${tab.id}-submenu`}

@@ -7,17 +7,17 @@ import Notifications from "../../ui/Notification/Notification.tsx";
 import DonationFeed from "../../ui/Donation/DonationFeed.tsx";
 import "./DashboardPage.css";
 import DashboardCampign from "../../common/User-dashboard/DashboardCampign/DashboardCampaign.tsx";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import useNotification from "@/hooks/useNotification.ts";
 import useAuth from "@/Context/AuthContext.tsx";
+import Index from "@/components/common/User-dashboard/Index.tsx";
 
 function DashboardPage() {
   const [activeTab, setActiveTab] = useState("tabCampaigns");
   const [activeSettingsTab, setActiveSettingsTab] = useState("profile");
   const [navigationUrl, setNavigationUrl] = useState("/user-dashboard");
 
-  const navigate = useNavigate();
-  const { userId } = useAuth();
+  const { userId, refreshStatus } = useAuth();
 
   // useEffect(() => {
   //   console.log("hello");
@@ -28,9 +28,15 @@ function DashboardPage() {
 
   const tabs = [
     {
+      id: "tabIndex",
+      label: "User Dashboard",
+      url: "/user-dashboard",
+      panel: <Index />,
+    },
+    {
       id: "tabCampaigns",
       label: "My Campaigns",
-      url: "/user-dashboard",
+      url: "/user-dashboard/campaign",
       panel: <CampaignTable />,
     },
     {
@@ -59,6 +65,14 @@ function DashboardPage() {
       panel: <Notifications />,
     },
   ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      refreshStatus();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <>

@@ -1,13 +1,14 @@
 export enum EKycStatus {
-    PENDING = 'PENDING',
-    VERIFIED = 'VERIFIED',
-    REJECTED = 'REJECTED'
-  }
+  PENDING = "PENDING",
+  VERIFIED = "VERIFIED",
+  REJECTED = "REJECTED",
+  FlAGGED = "FLAGGED",
+}
 
-  export enum ECampaignStatus {
-   PENDING = 'Pending',
-    ACTIVE = 'Active',
-    COMPLETED = 'Completed',
-    CANCELLED = 'Cancelled',
-    SUSPICIOUS = 'Suspicious'
-  }
+export enum ECampaignStatus {
+  PENDING = "PENDING",
+  ACTIVE = "ACTIVE",
+  COMPLETED = "COMPLETED",
+  CANCELLED = "CANCELLED",
+  SUSPICIOUS = "SUSPICIOUS",
+}

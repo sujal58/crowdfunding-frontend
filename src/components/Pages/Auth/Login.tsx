@@ -12,20 +12,25 @@ import type {
 import { signIn } from "@/apis/auth.api";
 import type { AxiosResponse } from "axios";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useAuth from "@/Context/AuthContext";
 
 function Login({ setCurrentPage }: any) {
   let navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
-  const { token, login, roles } = useAuth();
+  const { login } = useAuth();
 
-  // useEffect(() => {
-  //   if (token && roles.includes("ROLE_USER")) {
-  //     navigate("/user-dashboard");
-  //   }
-  // }, [token, roles]);
+  useEffect(() => {
+    const saved = localStorage.getItem("userdetails");
+    let token;
+    if (saved) {
+      token = JSON.parse(saved).token;
+    }
+    if (token) {
+      navigate("/user-dashboard");
+    }
+  }, []);
 
   const {
     register,
