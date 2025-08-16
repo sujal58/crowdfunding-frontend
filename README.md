@@ -1,4 +1,4 @@
-# Crowdfunding Frontend
+# AI Powered Crowdfunding-FundSaathi Frontend
 
 A modern frontend application for crowdfunding platforms, built with React, TypeScript, and Vite.
 
