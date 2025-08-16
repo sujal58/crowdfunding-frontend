@@ -1,54 +1,91 @@
-# React + TypeScript + Vite
+# Crowdfunding Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern frontend application for crowdfunding platforms, built with React, TypeScript, and Vite.
 
-Currently, two official plugins are available:
+## Table of Contents
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [Introduction](#introduction)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Getting Started](#getting-started)
+- [Environment Variables](#environment-variables)
+- [Available Scripts](#available-scripts)
+- [Folder Structure](#folder-structure)
+- [Contributing](#contributing)
+- [License](#license)
 
-## Expanding the ESLint configuration
+## Introduction
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+This project delivers a fast, responsive, and secure user interface for crowdfunding platforms. It enables project creators to launch campaigns and backers to support ideas, all with seamless payments and efficient dashboards.
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Features
+
+- **Campaign Management:** Create, edit, and manage crowdfunding campaigns.
+- **Project Browsing:** Discover and support projects.
+- **User Authentication:** Secure login, registration, and profile management.
+- **Stripe Integration:** Seamless payments for backing campaigns, powered by Stripe frontend integration.
+- **User Dashboard:** Personalized dashboard for users to track their contributions and campaigns.
+- **Admin Dashboard:** Comprehensive admin dashboard for managing campaigns, users, and platform analytics.
+- **Responsive Design:** Optimized for desktop and mobile devices.
+- **Fast Development Environment:** Powered by Vite for lightning-fast builds and HMR.
+
+## Tech Stack
+
+- [React](https://react.dev/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Vite](https://vitejs.dev/)
+- [Stripe](https://stripe.com/docs/payments/accept-a-payment?platform=web)
+- [ESLint](https://eslint.org/) (with recommended configs)
+- [CSS Modules](https://github.com/css-modules/css-modules) or [Tailwind CSS](https://tailwindcss.com/)
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (version 18+ recommended)
+- npm or yarn
+- Stripe account (for payment integration)
+
+### Installation
+
+```bash
+git clone https://github.com/sujal58/crowdfunding-frontend.git
+cd crowdfunding-frontend
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Running the App
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+```bash
+npm run dev
 ```
+
+The app will be available at `http://localhost:5173`.
+
+## Environment Variables
+
+Before running the project, you need to set up your environment variables:
+
+1. Copy the `.env.example` file to create a new `.env` file:
+    ```bash
+    cp .env.example .env
+    ```
+2. Open the new `.env` file and fill in the required values (e.g., your Stripe publishable key and other configuration variables).
+3. Save the file. The project will now use these variables for local development.
+
+
+## Available Scripts
+
+- `npm run dev` – Start development server
+- `npm run build` – Build for production
+- `npm run preview` – Preview production build
+- `npm run lint` – Run ESLint
+
+
+## Contributing
+
+Contributions are welcome! Please open issues or submit pull requests for improvements and bug fixes.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
