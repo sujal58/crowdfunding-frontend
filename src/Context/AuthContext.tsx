@@ -71,6 +71,7 @@ export function AuthProvider({ children }: any) {
       roles: userData.roles,
       status: userData.status,
     });
+    console.log(userData.token);
     localStorage.setItem("userdata", JSON.stringify(userData));
   };
 
@@ -84,7 +85,6 @@ export function AuthProvider({ children }: any) {
       const res = await getKycStatusByUserId(auth.userId);
       if (res.status == 200) {
         const data = res.data.data;
-        console.log(data);
         setAuth((prev) => ({
           ...prev,
           status: data.toString(),

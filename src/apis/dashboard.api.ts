@@ -14,7 +14,6 @@ export const getDashboardData = async (): Promise<
     const response = await axiosInstance.get(
       apiEndpoints.getuserDashboardDetails
     );
-    console.log(response);
 
     return response;
   } catch (error) {

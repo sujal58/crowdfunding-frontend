@@ -47,6 +47,7 @@ export const apiEndpoints = {
   getUnreadNotificationsUrl: `${baseApi}/notifications/unread`,
   getNotificationByIdUrl: `${baseApi}/notifications/`, // append {id}
   deleteNotificationUrl: `${baseApi}/notifications/`, // append {id}
+  changeNotificationStatusUrl: `${baseApi}/notifications/status`, ///notificationId?status=true
 
   // Roles
   getAllRolesUrl: `${baseApi}/roles`,

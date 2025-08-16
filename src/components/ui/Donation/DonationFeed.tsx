@@ -19,7 +19,6 @@ function DonationFeed() {
       try {
         const response: AxiosResponse<GetResponse<IDonationResponse>> =
           await getAllDonationByUser();
-        console.log(response);
         if (response.status == 200) {
           setDonations(response.data.data);
         }
@@ -44,8 +43,6 @@ function DonationFeed() {
     { donor: "Michael", amount: 100, time: "30 min ago" },
     { donor: "Sara", amount: 10, time: "1 hour ago" },
   ];
-
-  console.log(donations);
 
   return (
     <>

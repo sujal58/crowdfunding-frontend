@@ -1,6 +1,4 @@
-import axiosInstance from "@/apis/axios.instance";
 import { getDashboardData } from "@/apis/dashboard.api";
-import { apiEndpoints } from "@/constant/api.constant";
 import type { IDashboardDataResponse } from "@/interfaces/dashboard.interface";
 import type { GetSingleResponse } from "@/types";
 import type { AxiosResponse } from "axios";
@@ -20,7 +18,6 @@ function Index() {
 
         if (response.status == 200) {
           setData(response.data.data);
-          console.log(response.data.data);
         }
       } catch (err: unknown) {
         if (axios.isAxiosError(err)) {

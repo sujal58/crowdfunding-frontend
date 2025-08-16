@@ -3,7 +3,9 @@
   background: #f3f4f6;
   padding: 2rem 0rem;
   border-right: 1px solid #e5e7eb;
+  height: 92vh
 }
+
 .sidebar nav{
   width: 100%;
 }

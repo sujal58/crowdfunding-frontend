@@ -41,8 +41,6 @@ function UserSideBar({
   }, [status]);
 
   const toggleSettings = () => {
-    console.log("setting clicked");
-    console.log(isSettingsOpen);
     setIsSettingsOpen(!isSettingsOpen);
   };
 
