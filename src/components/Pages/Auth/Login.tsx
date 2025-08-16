@@ -14,6 +14,7 @@ import type { AxiosResponse } from "axios";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import useAuth from "@/Context/AuthContext";
+import { connectStomp } from "@/sockets/StompClient";
 
 function Login({ setCurrentPage }: any) {
   let navigate = useNavigate();
@@ -46,7 +47,6 @@ function Login({ setCurrentPage }: any) {
 
     try {
       const payload: ILoginRequest = { email_username: email, password };
-      console.log(payload);
 
       const response: AxiosResponse<ILoginResponse> = await signIn(payload);
 
@@ -64,6 +64,7 @@ function Login({ setCurrentPage }: any) {
         });
         const responseData = response.data.data;
         login(responseData);
+        connectStomp(responseData.token);
         navigate("/user-dashboard");
       }
     } catch (error: unknown) {

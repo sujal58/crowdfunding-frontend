@@ -87,7 +87,6 @@ export const getAllCampaignByStatus = async (
         },
       }
     );
-    console.log(response);
 
     return response;
   } catch (error) {

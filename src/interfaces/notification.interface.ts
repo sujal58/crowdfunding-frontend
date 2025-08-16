@@ -1,9 +1,9 @@
-export interface INotification {
+export interface INotificationResponse {
   notificationId: number;
   message: string;
   read: boolean;
   notificationType: string;
-  userId: number;
+  username: number;
   broadcast: boolean;
   createdAt: string;
 }

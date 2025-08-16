@@ -8,23 +8,23 @@ import DonationFeed from "../../ui/Donation/DonationFeed.tsx";
 import "./DashboardPage.css";
 import DashboardCampign from "../../common/User-dashboard/DashboardCampign/DashboardCampaign.tsx";
 import { Outlet } from "react-router-dom";
-import useNotification from "@/hooks/useNotification.ts";
 import useAuth from "@/Context/AuthContext.tsx";
 import Index from "@/components/common/User-dashboard/Index.tsx";
+import useNotification from "@/hooks/useNotification.ts";
 
 function DashboardPage() {
   const [activeTab, setActiveTab] = useState("tabCampaigns");
   const [activeSettingsTab, setActiveSettingsTab] = useState("profile");
   const [navigationUrl, setNavigationUrl] = useState("/user-dashboard");
 
-  const { userId, refreshStatus } = useAuth();
+  const { token, refreshStatus, username } = useAuth();
 
   // useEffect(() => {
   //   console.log("hello");
   //   navigate(navigationUrl);
   // }, [navigationUrl]);
 
-  useNotification(userId);
+  useNotification({ username, token });
 
   const tabs = [
     {

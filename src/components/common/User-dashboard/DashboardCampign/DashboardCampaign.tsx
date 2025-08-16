@@ -99,7 +99,7 @@ function DashboardCampign() {
 
           return (
             <CampaignCard
-              key={value.title}
+              key={value.id}
               campaignId={value.id}
               title={value.title}
               description={value.description}

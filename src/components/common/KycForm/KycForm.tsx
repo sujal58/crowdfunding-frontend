@@ -142,6 +142,14 @@ function KYCForm() {
         toast.error(message, {
           style: { background: "#fef2f2", color: "#ef4444" },
         });
+        let fetchResponse: AxiosResponse<GetSingleResponse<IKycResponse>> =
+          await getKycByUserId(userId);
+        if (fetchResponse.status === 200 && fetchResponse.data.data) {
+          setKycData(fetchResponse.data.data);
+          setKycSubmitted(true);
+        }
+        reset();
+        setFiles({ image: null, frontDoc: null, backDoc: null });
       } else {
         console.log(error);
         toast.error("Something went wrong. Please try again.", {
@@ -159,12 +167,26 @@ function KYCForm() {
 
   useEffect(() => {
     async function fetchUserKyc() {
-      let response: AxiosResponse<GetSingleResponse<IKycResponse>> =
-        await getKycByUserId(userId);
-      console.log(response.data.data);
-      if (response.status == 200 && response.data.data) {
-        setKycData(response.data.data);
-        setKycSubmitted(true);
+      try {
+        let response: AxiosResponse<GetSingleResponse<IKycResponse>> =
+          await getKycByUserId(userId);
+        if (response.status == 200 && response.data.data) {
+          setKycData(response.data.data);
+          setKycSubmitted(true);
+        }
+      } catch (error: unknown) {
+        console.log(error);
+        if (axios.isAxiosError(error) && error.response) {
+          const message = error.response.data?.data || "Request failed!";
+          toast.error(message, {
+            style: { background: "#fef2f2", color: "#ef4444" },
+          });
+        } else {
+          console.log(error);
+          toast.error("Something went wrong. Please try again.", {
+            style: { background: "#fef2f2", color: "#ef4444" },
+          });
+        }
       }
     }
     if (!kycEdit) fetchUserKyc();
@@ -173,7 +195,7 @@ function KYCForm() {
 
   useEffect(() => {
     if (processing) {
-      toast.info("Kyc is processing! Please wait", { autoClose: 5000 });
+      toast.info("Kyc is processing! Please wait", { autoClose: 10000 });
     }
   }, [processing]);
 
@@ -238,6 +260,7 @@ function KYCForm() {
             className="edit-kyc"
             onClick={handleEditKyc}
             aria-label="Edit KYC"
+            disabled={kycData?.status == "VERIFIED"}
           >
             Edit KYC
           </button>

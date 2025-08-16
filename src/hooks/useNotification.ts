@@ -1,68 +1,97 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { toast } from "react-toastify";
-import stompClient from "../sockets/StompClient";
+import { Client, type StompSubscription } from "@stomp/stompjs";
+import SockJS from "sockjs-client";
+import { NotificationType } from "@/enums";
 
-const useNotification = (username: string) => {
+interface UseNotificationProps {
+  username: string;
+  token: string;
+  socketUrl?: string; // optional custom URL
+}
+
+const useNotification = ({
+  username,
+  token,
+  socketUrl = "http://localhost:8080/ws",
+}: UseNotificationProps) => {
+  const clientRef = useRef<Client | null>(null);
+  const broadcastSubRef = useRef<StompSubscription | null>(null);
+  const privateSubRef = useRef<StompSubscription | null>(null);
+
   useEffect(() => {
-    const onConnect = () => {
-      console.log("STOMP connected");
+    if (!username || !token) return; // wait until user is logged in
 
-      const broadcastSub = stompClient.subscribe(
-        "/broadcast/notifications",
-        (message) => {
-          const data = JSON.parse(message.body);
-          toast.info(`🔔 ${data.message}`, {
-            position: "bottom-right",
-            autoClose: 10000,
-            hideProgressBar: true,
-            closeOnClick: false,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
-        }
-      );
+    const fullUrl = `${socketUrl}?token=${encodeURIComponent(token)}`;
 
-      const privateSub = stompClient.subscribe(
-        `/user/${username}/queue/notifications`,
-        (message) => {
-          const data = JSON.parse(message.body);
-          toast.info(`🧍 ${data.message}`, {
-            position: "bottom-right",
-            autoClose: 10000,
-            hideProgressBar: true,
-            closeOnClick: false,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
-        }
-      );
+    const client = new Client({
+      webSocketFactory: () => new SockJS(fullUrl),
+      reconnectDelay: 5000,
+      connectHeaders: {
+        Authorization: `Bearer ${token}`,
+      },
 
-      // Return cleanup function to unsubscribe on unmount or dependency change
-      return () => {
-        broadcastSub.unsubscribe();
-        privateSub.unsubscribe();
-      };
-    };
+      onConnect: () => {
+        console.log("✅ STOMP connected");
 
-    stompClient.onConnect = onConnect;
+        // Subscribe to broadcast messages
+        broadcastSubRef.current = client.subscribe(
+          "/broadcast/notifications",
+          (message) => {
+            const data = JSON.parse(message.body);
+            console.log("Message broadcasted: ", data);
+            toast.info(`🔔 ${data.message}`, {
+              position: "bottom-right",
+              autoClose: 10000,
+              hideProgressBar: true,
+              closeOnClick: false,
+              pauseOnHover: true,
+              draggable: true,
+              theme: "light",
+            });
+          }
+        );
 
-    if (!stompClient.active) {
-      stompClient.activate();
-    }
+        // Subscribe to private messages
+        privateSubRef.current = client.subscribe(
+          `/user/queue/notifications`,
+          (message) => {
+            const data = JSON.parse(message.body);
+            toast.info(
+              `${(data.notificationType = NotificationType.DONATION
+                ? "💵"
+                : "")} ${data.message}`,
+              {
+                position: "bottom-right",
+                autoClose: 10000,
+                hideProgressBar: true,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                theme: "light",
+              }
+            );
+          }
+        );
+      },
+      onStompError: (frame) => {
+        console.error("❌ STOMP error", frame);
+      },
+    });
 
-    // Cleanup function for useEffect (in case connection disconnects or component unmounts)
+    client.activate();
+
+    clientRef.current = client;
+
     return () => {
-      if (stompClient.connected) {
-        // Note: This won't unsubscribe those subscriptions created inside onConnect
-        // So keep cleanup inside onConnect return or add a state to track subs
-        stompClient.deactivate();
+      if (broadcastSubRef.current) broadcastSubRef.current.unsubscribe();
+      if (privateSubRef.current) privateSubRef.current.unsubscribe();
+      if (clientRef.current) {
+        clientRef.current.deactivate();
+        clientRef.current = null;
       }
     };
-  }, [username]);
+  }, [username, token, socketUrl]);
 };
 
 export default useNotification;
