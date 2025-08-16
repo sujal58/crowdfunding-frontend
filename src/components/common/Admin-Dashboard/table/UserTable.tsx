@@ -1,0 +1,180 @@
+import React from "react";
+import type { IUserResponse } from "@/interfaces/user.interface";
+import { EKycStatus } from "@/enums";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { changeKycStatusByAdmin } from "@/apis/kyc.api";
+
+interface UserTableProps {
+  type: "verifiedUsers" | "pendingUsers" | "rejectedUsers" | "flaggedUsers";
+  users: IUserResponse[];
+  onRefresh: () => void;
+}
+
+const UserTable: React.FC<UserTableProps> = ({ type, users, onRefresh }) => {
+  const getActions = (user: IUserResponse) => (
+    <div className="flex gap-2">
+      <button
+        className="table-btn view-btn bg-blue-500 text-white px-2 py-1 rounded"
+        onClick={() => handleAction(user, "View")}
+      >
+        Details
+      </button>
+      {type === "pendingUsers" && (
+        <>
+          <button
+            className="table-btn verify-btn bg-green-500 text-white px-2 py-1 rounded"
+            onClick={() => handleAction(user, "Verify")}
+          >
+            Verify
+          </button>
+          <button
+            className="table-btn reject-btn bg-red-500 text-white px-2 py-1 rounded"
+            onClick={() => handleAction(user, "Reject")}
+          >
+            Reject
+          </button>
+        </>
+      )}
+      {type === "verifiedUsers" && (
+        <button
+          className="table-btn flag-btn bg-yellow-500 text-white px-2 py-1 rounded"
+          onClick={() => handleAction(user, "Flag")}
+        >
+          Flag
+        </button>
+      )}
+      {type === "rejectedUsers" && (
+        <button
+          className="table-btn flag-btn bg-red-500 text-white px-2 py-1 rounded"
+          onClick={() => handleAction(user, "Delete")}
+        >
+          Delete
+        </button>
+      )}
+      {type === "flaggedUsers" && (
+        <>
+          <button
+            className="table-btn flag-btn bg-red-500 text-white px-2 py-1 rounded"
+            onClick={() => handleAction(user, "Delete")}
+          >
+            Delete
+          </button>
+          <button
+            className="table-btn flag-btn bg-green-500 text-white px-2 py-1 rounded"
+            onClick={() => handleAction(user, "unFlag")}
+          >
+            Remove flag
+          </button>
+        </>
+      )}
+    </div>
+  );
+
+  const handleAction = async (data: IUserResponse, action: string) => {
+    if (action === "View") {
+      // openModal("kyc", data);
+    } else if (action === "Verify") {
+      changeStatusOfUser(data.userId, EKycStatus.VERIFIED);
+    } else if (action === "Reject") {
+      changeStatusOfUser(data.userId, EKycStatus.REJECTED);
+    } else if (action === "Flag") {
+      changeStatusOfUser(data.userId, EKycStatus.FlAGGED);
+    } else if (action === "unFlag") {
+      changeStatusOfUser(data.userId, EKycStatus.PENDING);
+    }
+  };
+
+  const changeStatusOfUser = async (userId: number, status: EKycStatus) => {
+    try {
+      const response = await changeKycStatusByAdmin(userId, status);
+      if (response.status === 200) {
+        toast.success(`User ${userId} ${status.toLowerCase()} successfully`, {
+          style: { background: "#f0fdf4", color: "#22c55e" },
+        });
+        onRefresh && onRefresh();
+      }
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        toast.error(
+          err.response?.data.data || `Failed to ${status.toLowerCase()} user`,
+          {
+            style: { background: "#fef2f2", color: "#ef4444" },
+          }
+        );
+      } else {
+        toast.error("Something went wrong. Please try again.", {
+          style: { background: "#fef2f2", color: "#ef4444" },
+        });
+      }
+    }
+  };
+
+  const userTypeLabels: Record<string, string> = {
+    verifiedUsers: "Verified Users",
+    pendingUsers: "Pending Users",
+    flaggedUsers: "Flagged Users",
+    rejectedUsers: "Rejected Users",
+  };
+
+  return (
+    <>
+      <h2 className="text-3xl text-center font-extrabold mb-6 text-[#2563eb]">
+        {userTypeLabels[type] || "unknown header"}
+      </h2>
+      <table className="w-full border-collapse mb-6 text-sm">
+        <thead>
+          <tr>
+            <th className="border border-gray-300 p-3 bg-gray-100">
+              User Name
+            </th>
+            <th className="border border-gray-300 p-3 bg-gray-100">Name</th>
+            <th className="border border-gray-300 p-3 bg-gray-100">Email</th>
+            <th className="border border-gray-300 p-3 bg-gray-100">Country</th>
+            <th className="border border-gray-300 p-3 bg-gray-100">
+              KYC Status
+            </th>
+            <th className="border border-gray-300 p-3 bg-gray-100">
+              Submission Date
+            </th>
+            <th className="border border-gray-300 p-3 bg-gray-100">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {users.map((user) => (
+            <tr key={user.userId} className="hover:bg-blue-100">
+              <td className="border border-gray-300 p-3">{user.username}</td>
+              <td className="border border-gray-300 p-3">{user.name}</td>
+              <td className="border border-gray-300 p-3">{user.email}</td>
+              <td className="border border-gray-300 p-3">{user.country}</td>
+
+              <td
+                className="border border-gray-300 p-3 font-bold"
+                style={{
+                  color:
+                    user.kycStatus === EKycStatus.VERIFIED
+                      ? "#22c55e" // green
+                      : user.kycStatus === EKycStatus.PENDING
+                      ? "#f59e0b" // yellow
+                      : user.kycStatus === EKycStatus.REJECTED
+                      ? "#dc2626" // red (for rejected)
+                      : user.kycStatus === EKycStatus.FlAGGED
+                      ? "#c2410c"
+                      : "#ef4444", // fallback/default (also red or error color)
+                }}
+              >
+                {user.kycStatus}
+              </td>
+              <td className="border border-gray-300 p-3">
+                {user.createdAt.split("T")[0]}
+              </td>
+              <td className="border border-gray-300 p-3">{getActions(user)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </>
+  );
+};
+
+export default UserTable;

@@ -1,0 +1,138 @@
+/* Hero Section */
+.hero {
+  background: linear-gradient(135deg, #2563eb, #22c55e);
+  color: white;
+  padding: 6rem 2rem 5rem;
+  text-align: center;
+  border-bottom-left-radius: 3rem;
+  border-bottom-right-radius: 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.2) 0%,
+    transparent 70%
+  );
+  animation: pulse 10s infinite;
+  z-index: 0;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+}
+
+.hero h1 {
+  color: white;
+  font-weight: 800;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  margin-bottom: 1rem;
+  line-height: 1.1;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  animation: slideUp 1s ease-out;
+}
+
+.hero p {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  animation: slideUp 1.2s ease-out;
+}
+
+.hero .mission {
+  font-size: 1rem;
+  margin-bottom: 3rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  animation: slideUp 1.4s ease-out;
+}
+
+.hero .btn-group button {
+  font-size: 1.125rem;
+  font-weight: 700;
+  padding: 1rem 2rem;
+  margin: 0 0.5rem;
+}
+
+.btn-primary {
+  background-color: white;
+  color: #2563eb;
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.6);
+  animation: slideUp 1.6s ease-out;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: #e0e7ff;
+  color: #1e3a8a;
+  box-shadow: 0 8px 20px rgba(49, 130, 206, 0.5);
+  transform: scale(1.05);
+  outline: none;
+}
+
+.btn-secondary {
+  background-color: rgba(255, 255, 255, 0.25);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  animation: slideUp 1.8s ease-out;
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus {
+  background-color: rgba(255, 255, 255, 0.4);
+  border-color: white;
+  transform: scale(1.05);
+  outline: none;
+}
+
+/* Animations */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.2;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.2;
+  }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .hero .btn-group button {
+    /* display: block; */
+    /* width: 100%; */
+    margin: 0.5rem 0;
+  }
+}

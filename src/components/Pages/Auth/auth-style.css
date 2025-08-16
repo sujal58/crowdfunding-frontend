@@ -1,0 +1,143 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap");
+
+/* === Base Styling === */
+body,
+.signup-form,
+.login-form {
+  font-family: "Inter", sans-serif;
+}
+
+.authPage {
+  height: 90vh;
+}
+
+.authPage input,
+.authPage select,
+.authPage button {
+  font-family: inherit;
+  font-size: 1rem;
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+}
+
+.authPage input:focus,
+.authPage select:focus,
+.authPage button:focus {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+  border-color: #2563eb;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.error {
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.authPage h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  /* margin-top: 2rem; */
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #2563eb;
+}
+
+/* === Button Styling === */
+.authPage button {
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-btn {
+  background: #2563eb;
+  color: white;
+  font-weight: 600;
+  margin-top: 1rem;
+}
+
+.submit-btn:hover,
+.submit-btn:focus {
+  background: #1e40af;
+}
+
+.google-btn {
+  background: white;
+  border: 1px solid #e5e7eb;
+  color: #111827;
+  font-weight: 600;
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.google-btn img {
+  width: 20px;
+  height: 20px;
+}
+
+.google-btn:hover,
+.google-btn:focus {
+  background: #f3f4f6;
+}
+
+.admin-toggle-btn {
+  background: transparent;
+  border: 1px solid #2563eb;
+  color: #2563eb;
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
+.admin-toggle-btn:hover,
+.admin-toggle-btn:focus {
+  background: #e0e7ff;
+}
+
+/* === Link Styling === */
+.auth-links {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.875rem;
+}
+
+.auth-links a {
+  margin: 0 0.5rem;
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.auth-links a:hover,
+.auth-links a:focus {
+  text-decoration: underline;
+  outline: none;
+}
+
+/* === Responsive === */
+@media (max-width: 600px) {
+  h1 {
+    font-size: 1.75rem;
+  }
+
+  .google-btn,
+  .admin-toggle-btn {
+    font-size: 0.875rem;
+  }
+}

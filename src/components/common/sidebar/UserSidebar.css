@@ -1,0 +1,141 @@
+.sidebar {
+  width: 260px;
+  background: #f3f4f6;
+  padding: 2rem 0rem;
+  border-right: 1px solid #e5e7eb;
+  height: 92vh
+}
+
+.sidebar nav{
+  width: 100%;
+}
+nav[aria-label="Dashboard Navigation"] ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+}
+nav[aria-label="Dashboard Navigation"] li {
+  margin-bottom: 1.5rem;
+  width: 100%;
+  text-align: center;
+}
+nav[aria-label="Dashboard Navigation"] button {
+  width: 90%;
+  background: transparent;
+  color: #374151;
+  font-weight: 600;
+  padding: 0.8rem 0rem;
+  border-radius: 0.5rem;
+  text-align: left;
+  padding-left: 1rem;
+}
+nav[aria-label="Dashboard Navigation"] button[aria-selected="true"],
+nav[aria-label="Dashboard Navigation"] button:hover,
+nav[aria-label="Dashboard Navigation"] button:focus {
+  background-color: #2563eb;
+  color: white;
+  outline: none;
+}
+
+#settings-submenu {
+  margin-top: 1rem;
+}
+
+
+#settings-submenu button {
+  width: 100%;
+  background: transparent;
+  color: #374151;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  text-align: center;
+ 
+}
+
+.admin-sidebar .submenu {
+  background: #d1d5dc;
+  border-radius: 0.5rem 1rem 1rem 0;
+  padding: 0.5rem 0rem;
+  width: 90%;
+  margin: auto;
+  font-size: 0.95rem;
+}
+
+.admin-sidebar .submenu li{
+ width: 100%;
+}
+
+#settings-submenu .active {
+  color: #2563eb;
+}
+
+#settings-submenu.open {
+  display: block;
+}
+
+.admin-sidebar ul.submenu.open {
+  display: block;
+}
+
+#settings-submenu.close {
+  display: none;
+}
+
+.admin-sidebar ul.submenu.close {
+  display: none;
+}
+
+
+
+.admin-sidebar .submenu button {
+  text-align: center;
+}
+
+.admin-sidebar .submenu button#tabUnapprovedCampaigns {
+  padding: 10px;
+}
+
+.admin-sidebar .submenu button:hover {
+  color: #2563eb;
+  background-color: transparent;
+  outline: none;
+}
+
+.admin-sidebar .submenu button.active {
+  color: #2563eb;
+  background: #f3f4f6;
+  outline: none;
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    height: auto;
+    position: absolute;
+    right: 2px;
+    border-radius: 1rem 0rem 0rem 1rem;
+  }
+  aside {
+    border-right: none;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 0.5rem;
+    overflow-x: auto;
+  }
+  nav[aria-label="Dashboard Navigation"] ul {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+  }
+  nav[aria-label="Dashboard Navigation"] li {
+    margin-right: 1rem;
+    margin-bottom: 0;
+  }
+  nav[aria-label="Dashboard Navigation"] button {
+    padding: 0.5rem 1rem;
+    white-space: nowrap;
+  }
+}

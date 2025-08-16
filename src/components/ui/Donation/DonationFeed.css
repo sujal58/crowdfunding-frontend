@@ -1,0 +1,15 @@
+.donation-feed {
+  text-align: center;
+  max-height: 200px;
+  overflow-y: auto;
+  background: #f3f4f6;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  font-size: 0.9rem;
+}
+.donation-feed-item {
+  margin-bottom: 0.5rem;
+}
+.donation-feed-item time {
+  color: #6b7280;
+}
