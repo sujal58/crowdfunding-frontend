@@ -85,12 +85,12 @@ function Login({ setCurrentPage }: any) {
   const handleGoogleLogin = () => {
     try {
       console.log("Initiating Google OAuth login");
-      toast.success("Logged in with Google! Redirecting...", {
-        style: { background: "#f0fdf4", color: "#22c55e" },
-        onClose: () => {
-          alert("Redirecting to user dashboard...");
-        },
-      });
+      // toast.success("Logged in with Google! Redirecting...", {
+      //   style: { background: "#f0fdf4", color: "#22c55e" },
+      //   onClose: () => {
+      //     alert("Redirecting to user dashboard...");
+      //   },
+      // });
     } catch (error) {
       toast.error("Google login failed.", {
         style: { background: "#fef2f2", color: "#ef4444" },
@@ -156,16 +156,18 @@ function Login({ setCurrentPage }: any) {
           <button type="submit" className="submit-btn" aria-label="Log in">
             Log In
           </button>
-          <button
-            type="button"
-            className="google-btn"
-            id="loginGoogle"
-            aria-label="Sign in with Google"
-            onClick={handleGoogleLogin}
-          >
-            <img src="https://www.google.com/favicon.ico" alt="Google logo" />
-            Sign in with Google
-          </button>
+          <a href="http://localhost:8080/oauth2/authorization/google">
+            <button
+              type="button"
+              className="google-btn"
+              id="loginGoogle"
+              aria-label="Sign in with Google"
+              onClick={handleGoogleLogin}
+            >
+              <img src="https://www.google.com/favicon.ico" alt="Google logo" />
+              Sign in with Google
+            </button>
+          </a>
           <button
             type="button"
             className="admin-toggle-btn"

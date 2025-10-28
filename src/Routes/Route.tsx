@@ -37,6 +37,8 @@ import PaymentPage from "@/components/Pages/PaymentPage";
 import PaymentSuccess from "@/components/Pages/PaymentSuccess";
 import Index from "@/components/common/User-dashboard/Index";
 import FlaggedUser from "@/components/common/Admin-Dashboard/user/FlaggedUser";
+import OAuthSuccessHandler from "@/utils/OAuthSuccessHandler";
+import OAuthErrorPage from "@/components/Pages/Auth/OAuthErrorPage";
 
 export const router = createBrowserRouter([
   {
@@ -54,6 +56,14 @@ export const router = createBrowserRouter([
   {
     path: "/register",
     Component: Register,
+  },
+  {
+    path: "/oauth-success",
+    Component: OAuthSuccessHandler,
+  },
+  {
+    path: "/oauth-error",
+    Component: OAuthErrorPage,
   },
   {
     path: "/forgot-password",
